@@ -8,6 +8,12 @@ var Player = function() {
 	this.velocity = {x: 0, y: 0};
 	this.recoilMagnitude = 0.8;
 
+	this.shootInterval = 10;
+	this.shootTimer = 0;
+	this.bullets = [];
+	this.deadBullets = [];
+	this.bulletSpeed = 5;
+
 	// setup key map
 	this.DOWN_KEY = Keys.DOWN;
 	this.UP_KEY = Keys.UP;
@@ -50,10 +56,30 @@ Player.prototype.update = function(delta) {
 		Mouse.y
 	) + Math.PI / 2;
 
+	this.shootTimer--;
+
+	this.updateBullets(delta);
 	this.updateShadow(delta);
 	this.keepOnScreen(delta);
 	this.applyFriction(delta);
 
+}
+
+Player.prototype.updateBullets = function(delta) {
+	for (bullet of this.bullets) {
+		if (!bullet.sprite.visible) {
+			continue;
+		}
+		bullet.update(delta);
+		if (Util.isSpriteOffScreen(bullet.sprite, bullet.sprite.width)) {
+			this.killBullet(bullet);
+		}
+	}
+}
+
+Player.prototype.killBullet = function(bullet) {
+	bullet.sprite.visible = false;
+	this.deadBullets.push(bullet);
 }
 
 Player.prototype.handleInput = function(delta) {
@@ -112,8 +138,33 @@ Player.prototype.addMotion = function(direction, magnitude) {
 }
 
 Player.prototype.shoot = function() {
+
+	if (this.shootTimer > 0) {
+		return;
+	}
+
 	// recoil in the opposite direction the player is facing
 	this.addMotion(Math.PI + this.sprite.rotation, this.recoilMagnitude);
+
+	this.shootTimer = this.shootInterval;
+	var bullet = this.createBullet();
+	bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
+	bullet.sprite.position = this.sprite.position;
+	
+}
+
+Player.prototype.createBullet = function() {
+
+	var bullet;
+	if (this.deadBullets.length > 0) {
+		bullet = this.deadBullets.pop();
+	} else {
+		bullet = new Bullet();
+		this.bullets.push(bullet);
+		stage.addChild(bullet.sprite);
+	}
+	bullet.sprite.visible = true;
+	return bullet;
 }
 
 // diminish a value by percentage, until it is smaller than minimum.
