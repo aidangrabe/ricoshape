@@ -2,8 +2,14 @@
 
 var player;
 var squareSpawner;
+var baseColor;
 
 function setup() {
+
+	baseColor = Util.generateColor();
+
+	renderer.backgroundColor = baseColor;
+
 	player = new Player();
 	player.addToStage(stage, shadowLayer);
 

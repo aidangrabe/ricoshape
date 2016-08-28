@@ -33,7 +33,7 @@ Player.prototype.addToStage = function(stage, shadowLayer) {
 
 Player.prototype.createPlayerSprite = function() {
 	var size = Constants.SCREEN_UNIT;
-	return this.createTriangleGraphic(0xFF0000, size, size);
+	return this.createTriangleGraphic(Util.generateColorFrom(baseColor), size, size);
 }
 
 Player.prototype.createPlayerShadow = function() {

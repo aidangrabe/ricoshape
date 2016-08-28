@@ -4,7 +4,7 @@ function Square() {
 	this.TARGET_ZONE_WIDTH = canvas.width / 2;
 	this.TARGET_ZONE_HEIGHT = canvas.height / 2;
 
-	this.sprite = this.createSquareGraphic(0x0000FF, 32, 32);
+	this.sprite = this.createSquareGraphic(0x777777, 32, 32);
 	this.velocity = {
 		x: 0,
 		y: 0
@@ -22,6 +22,7 @@ Square.prototype.reset = function() {
 	this.targetPoint = this.createRandomTargetPoint();
 	this.direction = Geom.angleBetweenCoords(this.sprite.position.x, this.sprite.position.y,
 		this.targetPoint.x, this.targetPoint.y) + Math.PI / 2;
+	this.sprite.tint = Util.generateColorFrom(baseColor);
 
 	this.speed = Util.randomBetween(this.MIN_SPEED, this.MAX_SPEED);
 
