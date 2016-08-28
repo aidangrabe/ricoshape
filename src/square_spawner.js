@@ -1,6 +1,8 @@
 function SquareSpawner() {
 	this.squares = [];
-	this.deadSquares = [];
+
+	// references any squares that have been destroyed so we can recycle them
+	this.deadSquares = [new Square()];
 
 	// number of squares to spawn per second
 	this.spawnFrequency = 1;
@@ -8,8 +10,12 @@ function SquareSpawner() {
 
 SquareSpawner.prototype.update = function(delta) {
 	for (var square of this.squares) {
+		if (!square.sprite.visible) {
+			continue;
+		}
+
 		square.update(delta);
-		if (square.isOffScreen(100)) {
+		if (square.isOffScreen(200)) {
 			this.killSquare(square);
 		}
 	}
@@ -29,18 +35,24 @@ SquareSpawner.prototype.spawn = function() {
 		square = this.deadSquares.pop();
 	} else {
 		square = new Square();
+		stage.addChild(square.sprite);
+		this.squares.push(square);
 	}
 
 	square.reset();
-	this.squares.push(square);
-	stage.addChild(square.sprite);
 }
 
 SquareSpawner.prototype.killSquare = function(square) {
-	stage.removeChild(square.sprite);
-
-	var index = this.squares.indexOf(square);
-	this.squares.splice(index, 1);
-
+	square.sprite.visible = false;
 	this.deadSquares.push(square);
+}
+
+SquareSpawner.prototype.checkForCollisions = function(player) {
+
+	for (square of this.squares) {
+		if (Util.spriteCollidesWithSprite(square.sprite, player.sprite)) {
+			player.hitBySquare(square);
+		}
+	}
+
 }

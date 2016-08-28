@@ -11,9 +11,12 @@ function Square() {
 	};
 
 	this.reset();
+
 }
 
 Square.prototype.reset = function() {
+
+	this.sprite.visible = true;
 	this.moveToStartingPoint();
 
 	this.targetPoint = this.createRandomTargetPoint();

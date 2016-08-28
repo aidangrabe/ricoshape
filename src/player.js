@@ -132,6 +132,10 @@ Player.prototype.updateShadow = function(delta) {
 	this.shadow.rotation = this.sprite.rotation;
 }
 
+Player.prototype.hitBySquare = function(square) {
+	console.log("Hit by square!");
+}
+
 Player.prototype.createTriangleGraphic = function(color, width, height) {
 	var sprite = new PIXI.Graphics();
 
