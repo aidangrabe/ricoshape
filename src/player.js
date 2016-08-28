@@ -112,8 +112,8 @@ Player.prototype.addMotion = function(direction, magnitude) {
 }
 
 Player.prototype.shoot = function() {
-	// recoil
-	this.addMotion(Math.PI + this.direction, this.recoilMagnitude);
+	// recoil in the opposite direction the player is facing
+	this.addMotion(Math.PI + this.sprite.rotation, this.recoilMagnitude);
 }
 
 // diminish a value by percentage, until it is smaller than minimum.
