@@ -28,6 +28,7 @@ function gameLoop() {
 function setupInput() {
 	document.addEventListener('keydown', Keyboard.onKeyDown);
 	document.addEventListener('keyup', Keyboard.onKeyUp);
+	document.addEventListener('mousemove', Mouse.onMouseMove);
 }
 
 setupInput();

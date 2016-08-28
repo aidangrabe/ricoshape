@@ -7,6 +7,14 @@ var Player = function() {
 	this.friction = 0.98;
 	this.velocity = {x: 0, y: 0};
 	this.recoilMagnitude = 0.8;
+
+	// setup key map
+	this.DOWN_KEY = Keys.DOWN;
+	this.UP_KEY = Keys.UP;
+	this.LEFT_KEY = Keys.LEFT;
+	this.RIGHT_KEY = Keys.RIGHT;
+	this.SHOOT_KEY = Keys.SPACE;
+
 }
 
 Player.prototype.addToStage = function(stage, shadowLayer) {
@@ -27,42 +35,48 @@ Player.prototype.createPlayerShadow = function() {
 	return this.createTriangleGraphic(0xFFFFFF, size, size);
 }
 
-Player.prototype.turnLeft = function() {
-	this.sprite.rotation -= this.rotationSpeed;
-	this.direction -= this.rotationSpeed;
-}
-
-Player.prototype.turnRight = function() {
-	this.sprite.rotation += this.rotationSpeed;
-	this.direction += this.rotationSpeed;
-}
-
 Player.prototype.update = function(delta) {
 
-	if (Input.isKeyDown(Keys.LEFT)) {
-		this.turnLeft();
-	}
-
-	if (Input.isKeyDown(Keys.RIGHT)) {
-		this.turnRight();
-	}
-
-	if (Input.isKeyDown(Keys.UP)) {
-		this.addMotion(this.direction, this.acceleration * delta);
-	}
-
-	if (Input.isKeyDown(Keys.SPACE)) {
-		this.shoot();
-	}
+	this.handleInput(delta);
 
 	// movement
 	this.sprite.position.x += this.velocity.x;
 	this.sprite.position.y += this.velocity.y;
 
+	this.sprite.rotation = Geom.angleBetweenCoords(
+		this.sprite.position.x,
+		this.sprite.position.y,
+		Mouse.x,
+		Mouse.y
+	) + Math.PI / 2;
+
 	this.updateShadow(delta);
 	this.keepOnScreen(delta);
 	this.applyFriction(delta);
 
+}
+
+Player.prototype.handleInput = function(delta) {
+
+	if (Input.isKeyDown(this.LEFT_KEY)) {
+		this.addMotion(Geom.ANGLE_LEFT, this.acceleration * delta);
+	}
+
+	if (Input.isKeyDown(this.RIGHT_KEY)) {
+		this.addMotion(Geom.ANGLE_RIGHT, this.acceleration * delta);
+	}
+
+	if (Input.isKeyDown(this.UP_KEY)) {
+		this.addMotion(Geom.ANGLE_UP, this.acceleration * delta);
+	}
+
+	if (Input.isKeyDown(this.DOWN_KEY)) {
+		this.addMotion(Geom.ANGLE_DOWN, this.acceleration * delta);
+	}
+
+	if (Input.isKeyDown(this.SHOOT_KEY)) {
+		this.shoot();
+	}
 }
 
 Player.prototype.keepOnScreen = function(delta) {

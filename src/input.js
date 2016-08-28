@@ -21,3 +21,12 @@ var Input = {
 		return Keyboard.keyStates[keyCode] == true;
 	}
 };
+
+var Mouse = {
+	x: 0,
+	y: 0,
+	onMouseMove: function(event) {
+		Mouse.x = event.clientX - canvas.offsetLeft;
+		Mouse.y = event.clientY - canvas.offsetTop;
+	}
+};
