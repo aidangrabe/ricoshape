@@ -58,6 +58,20 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 			square.hitByPlayer(player);
 			this.killSquare(square);
 		}
+
+		var bullets = player.bullets;
+		for (bullet of bullets) {
+			if (!bullet.sprite.visible) {
+				continue;
+			}
+			if (Util.spriteCollidesWithSprite(square.sprite, bullet.sprite)) {
+				bullet.hitBySquare(square);
+				square.hitByBullet(bullet);
+				
+				player.killBullet(bullet);
+				this.killSquare(square);
+			}
+		}
 	}
 
 }

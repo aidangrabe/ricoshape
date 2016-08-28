@@ -115,3 +115,7 @@ Square.prototype.isOffScreen = function(margin = 0) {
 		|| this.sprite.position.y > canvas.height + margin
 		|| this.sprite.position.y < -margin;
 }
+
+Square.prototype.hitByBullet = function(bullet) {
+	// todo:
+}
