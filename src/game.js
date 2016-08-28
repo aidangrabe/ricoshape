@@ -1,19 +1,18 @@
 // main game file
 
 var player;
-var square;
+var squareSpawner;
 
 function setup() {
 	player = new Player();
 	player.addToStage(stage, shadowLayer);
 
-	square = new Square();
-	stage.addChild(square.sprite);
+	squareSpawner = new SquareSpawner();
 }
 
 function gameLogic(delta) {
 
+	squareSpawner.update(20);
 	player.update(delta / 16 * Constants.SCREEN_UNIT / 20);
-	square.update(delta);
 	
 }

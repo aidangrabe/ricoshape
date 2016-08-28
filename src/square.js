@@ -1,19 +1,27 @@
 function Square() {
 	this.MAX_SPEED = 0.3;
 	this.MIN_SPEED = 0.1;
+	this.TARGET_ZONE_WIDTH = canvas.width / 2;
+	this.TARGET_ZONE_HEIGHT = canvas.height / 2;
 
 	this.sprite = this.createSquareGraphic(0x0000FF, 32, 32);
+	this.velocity = {
+		x: 0,
+		y: 0
+	};
+
+	this.reset();
+}
+
+Square.prototype.reset = function() {
 	this.moveToStartingPoint();
 
 	this.targetPoint = this.createRandomTargetPoint();
 	this.direction = Geom.angleBetweenCoords(this.sprite.position.x, this.sprite.position.y,
 		this.targetPoint.x, this.targetPoint.y) + Math.PI / 2;
+
 	this.speed = Util.randomBetween(this.MIN_SPEED, this.MAX_SPEED);
 
-	this.velocity = {
-		x: 0,
-		y: 0
-	};
 	this.setVelocity(this.direction, this.speed);
 	this.rotationSpeed = this.speed / 25;
 	if (this.isMovingLeft()) {
@@ -41,16 +49,13 @@ Square.prototype.update = function(delta) {
 
 Square.prototype.moveToStartingPoint = function() {
 	// get a random value between 0-3
-	// var random = ~~Math.random() * 4;
-	var random = 0;
+	var random = ~~(Math.random() * 4);
 
 	switch (random) {
 		// top
 		case 0:
-			// this.sprite.position.y = -this.sprite.height;
-			// this.sprite.position.x = Math.random() * canvas.width;
-			this.sprite.position.y = 400;
-			this.sprite.position.x = 400;
+			this.sprite.position.y = -this.sprite.height;
+			this.sprite.position.x = Math.random() * canvas.width;
 			break;
 		// left
 		case 1:
@@ -71,9 +76,13 @@ Square.prototype.moveToStartingPoint = function() {
 }
 
 Square.prototype.createRandomTargetPoint = function() {
+	var centerX = canvas.width / 2;
+	var centerY = canvas.height / 2;
+	var zoneX = Math.random() * this.TARGET_ZONE_WIDTH;
+	var zoneY = Math.random() * this.TARGET_ZONE_HEIGHT;
 	return {
-		x: canvas.width / 2,
-		y: canvas.height / 2
+		x: centerX + (this.TARGET_ZONE_WIDTH / 2) - zoneX,
+		y: centerY + (this.TARGET_ZONE_HEIGHT / 2) - zoneY
 	};
 }
 
@@ -91,4 +100,11 @@ Square.prototype.setVelocity = function(direction, speed) {
 
 Square.prototype.isMovingLeft = function() {
 	return this.velocity.x < 0;
+}
+
+Square.prototype.isOffScreen = function(margin = 0) {
+	return this.sprite.position.x > canvas.width + margin
+		|| this.sprite.position.x < -margin
+		|| this.sprite.position.y > canvas.height + margin
+		|| this.sprite.position.y < -margin;
 }
