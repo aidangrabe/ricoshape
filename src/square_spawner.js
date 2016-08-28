@@ -50,8 +50,13 @@ SquareSpawner.prototype.killSquare = function(square) {
 SquareSpawner.prototype.checkForCollisions = function(player) {
 
 	for (square of this.squares) {
+		if (!square.sprite.visible) {
+			continue;
+		}
 		if (Util.spriteCollidesWithSprite(square.sprite, player.sprite)) {
 			player.hitBySquare(square);
+			square.hitByPlayer(player);
+			this.killSquare(square);
 		}
 	}
 

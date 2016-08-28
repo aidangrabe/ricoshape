@@ -133,7 +133,7 @@ Player.prototype.updateShadow = function(delta) {
 }
 
 Player.prototype.hitBySquare = function(square) {
-	console.log("Hit by square!");
+	// todo:
 }
 
 Player.prototype.createTriangleGraphic = function(color, width, height) {

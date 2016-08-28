@@ -105,6 +105,10 @@ Square.prototype.isMovingLeft = function() {
 	return this.velocity.x < 0;
 }
 
+Square.prototype.hitByPlayer = function() {
+	// todo:
+}
+
 Square.prototype.isOffScreen = function(margin = 0) {
 	return this.sprite.position.x > canvas.width + margin
 		|| this.sprite.position.x < -margin
