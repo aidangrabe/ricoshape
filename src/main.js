@@ -4,6 +4,7 @@ var renderer = PIXI.autoDetectRenderer(canvas.width, canvas.height, {view: canva
 
 var rootContainer = new PIXI.Container();
 var shadowLayer = new PIXI.Container();
+var particleLayer = new PIXI.Container();
 var stage = new PIXI.Container();
 var lastFrameMillis = Date.now();
 
@@ -12,6 +13,7 @@ var Constants = {
 };
 
 rootContainer.addChild(shadowLayer);
+rootContainer.addChild(particleLayer);
 rootContainer.addChild(stage);
 
 function gameLoop() {
