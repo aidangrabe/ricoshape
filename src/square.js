@@ -8,7 +8,7 @@ function Square() {
 	this.TARGET_ZONE_HEIGHT = canvas.height / 2;
 
 	this.score = 0;
-	this.sprite = this.createSquareGraphic(0x777777, 32, 32);
+	this.sprite = this.createSquareGraphic(0xFFFFFF, 32, 32);
 	this.size = 1;
 	this.velocity = {
 		x: 0,
@@ -132,9 +132,10 @@ Square.prototype.isOffScreen = function(margin) {
 
 Square.prototype.hitByBullet = function(bullet) {
 	Quake.shake(10, 10);
-	console.log("score += " + this.score);
+	LeaveBehindText.createAt(this.sprite.x, this.sprite.y, this.sprite.tint, this.score);
 }
 
 Square.prototype.calculateScore = function() {
 	this.score = (this.MAX_SIZE + this.MIN_SIZE - this.size) * this.speed * 100;
+	this.score = ~~this.score;
 }

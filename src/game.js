@@ -23,6 +23,8 @@ function gameLogic(delta) {
 	squareSpawner.update(20);
 	player.update(delta / 16 * Constants.SCREEN_UNIT / 20);
 
+	LeaveBehindText.update(delta);
+
 	squareSpawner.checkForCollisions(player);
 	
 }
