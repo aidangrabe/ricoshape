@@ -18,6 +18,8 @@ function setup() {
 
 function gameLogic(delta) {
 
+	ParticleManager.update(delta);
+
 	squareSpawner.update(20);
 	player.update(delta / 16 * Constants.SCREEN_UNIT / 20);
 

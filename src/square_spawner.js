@@ -47,6 +47,11 @@ SquareSpawner.prototype.killSquare = function(square) {
 	this.deadSquares.push(square);
 }
 
+SquareSpawner.prototype.explodeSquare = function(square) {
+	this.killSquare(square);
+	ParticleManager.burstAt(square.sprite.x, square.sprite.y, 30);
+}
+
 SquareSpawner.prototype.checkForCollisions = function(player) {
 
 	for (square of this.squares) {
@@ -56,7 +61,7 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 		if (Util.spriteCollidesWithSprite(square.sprite, player.sprite)) {
 			player.hitBySquare(square);
 			square.hitByPlayer(player);
-			this.killSquare(square);
+			this.explodeSquare(square);
 		}
 
 		var bullets = player.bullets;
@@ -69,7 +74,7 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 				square.hitByBullet(bullet);
 				
 				player.killBullet(bullet);
-				this.killSquare(square);
+				this.explodeSquare(square);
 			}
 		}
 	}
