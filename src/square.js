@@ -34,8 +34,9 @@ Square.prototype.reset = function() {
 	this.speed = Util.randomBetween(this.MIN_SPEED, this.MAX_SPEED);
 
 	this.setVelocity(this.direction, this.speed);
-	this.rotationSpeed = this.speed / 25;
-	if (this.isMovingLeft()) {
+	this.rotationSpeed = this.speed / 25 / this.size;
+
+	if (Util.oneIn(2)) {
 		this.rotationSpeed *= -1;
 	}
 }
