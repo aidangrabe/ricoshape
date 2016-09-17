@@ -126,5 +126,5 @@ Square.prototype.isOffScreen = function(margin) {
 }
 
 Square.prototype.hitByBullet = function(bullet) {
-	// todo:
+	Quake.shake(10, 10);
 }
