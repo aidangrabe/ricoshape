@@ -5,6 +5,7 @@ function Square() {
 	this.TARGET_ZONE_HEIGHT = canvas.height / 2;
 
 	this.sprite = this.createSquareGraphic(0x777777, 32, 32);
+	this.size = 1;
 	this.velocity = {
 		x: 0,
 		y: 0
@@ -24,6 +25,12 @@ Square.prototype.reset = function() {
 		this.targetPoint.x, this.targetPoint.y) + Math.PI / 2;
 	this.sprite.tint = Util.generateColorFrom(baseColor);
 
+	this.size = Util.randomBetween(1, 2.5);
+	this.sprite.tint = Util.generateColorFrom(baseColor);
+	this.sprite.scale = {
+		x: this.size,
+		y: this.size
+	};
 	this.speed = Util.randomBetween(this.MIN_SPEED, this.MAX_SPEED);
 
 	this.setVelocity(this.direction, this.speed);
