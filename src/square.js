@@ -1,9 +1,13 @@
 function Square() {
 	this.MAX_SPEED = 0.3;
 	this.MIN_SPEED = 0.1;
+	this.MAX_SIZE  = 2.5;
+	this.MIN_SIZE  = 1;
+
 	this.TARGET_ZONE_WIDTH = canvas.width / 2;
 	this.TARGET_ZONE_HEIGHT = canvas.height / 2;
 
+	this.score = 0;
 	this.sprite = this.createSquareGraphic(0x777777, 32, 32);
 	this.size = 1;
 	this.velocity = {
@@ -25,7 +29,7 @@ Square.prototype.reset = function() {
 		this.targetPoint.x, this.targetPoint.y) + Math.PI / 2;
 	this.sprite.tint = Util.generateColorFrom(baseColor);
 
-	this.size = Util.randomBetween(1, 2.5);
+	this.size = Util.randomBetween(this.MIN_SIZE, this.MAX_SIZE);
 	this.sprite.tint = Util.generateColorFrom(baseColor);
 	this.sprite.scale = {
 		x: this.size,
@@ -35,6 +39,8 @@ Square.prototype.reset = function() {
 
 	this.setVelocity(this.direction, this.speed);
 	this.rotationSpeed = this.speed / 25 / this.size;
+
+	this.calculateScore();
 
 	if (Util.oneIn(2)) {
 		this.rotationSpeed *= -1;
@@ -115,7 +121,6 @@ Square.prototype.isMovingLeft = function() {
 }
 
 Square.prototype.hitByPlayer = function() {
-	// todo:
 }
 
 Square.prototype.isOffScreen = function(margin) {
@@ -127,4 +132,9 @@ Square.prototype.isOffScreen = function(margin) {
 
 Square.prototype.hitByBullet = function(bullet) {
 	Quake.shake(10, 10);
+	console.log("score += " + this.score);
+}
+
+Square.prototype.calculateScore = function() {
+	this.score = (this.MAX_SIZE + this.MIN_SIZE - this.size) * this.speed * 100;
 }
