@@ -5,11 +5,27 @@ var Util = {
 		return min + Math.random() * (max - min);
 	},
 
-	spriteCollidesWithSprite: function(sprite1, sprite2) {
-		return !(sprite1.position.x - sprite1.pivot.x > sprite2.position.x - sprite2.pivot.x + sprite2.width
-			|| sprite1.position.x - sprite1.pivot.x + sprite1.width < sprite2.position.x - sprite2.pivot.x
-			|| sprite1.position.y - sprite1.pivot.y > sprite2.position.y - sprite1.pivot.y + sprite2.height
-			|| sprite1.position.y - sprite1.pivot.y + sprite1.height < sprite2.position.y - sprite1.pivot.y);
+	spriteCollidesWithSprite: function(s1, s2) {
+
+		var x1 = s1.position.x;
+		var x2 = s2.position.x;
+		var y1 = s1.position.y;
+		var y2 = s2.position.y;
+
+		var xdist = x1 - x2;
+
+		var combinedCenterX = (s1.width + s2.width) / 2;
+		var combinedCenterY = (s1.height + s2.height) / 2;
+
+		if (xdist > -combinedCenterX && xdist < combinedCenterX) {
+			var ydist = y1 - y2;
+			if (ydist > -combinedCenterY && ydist < combinedCenterY) {
+				return true;
+			}
+		}
+
+		return false;
+
 	},
 
 	isSpriteOffScreen: function(sprite, margin = 0) {
