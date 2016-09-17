@@ -1,6 +1,10 @@
 
 var Util = {
 
+	oneIn: function(n) {
+		return ~~(Math.random() * n) == 0
+	},
+
 	randomBetween: function(min, max) {
 		return min + Math.random() * (max - min);
 	},
