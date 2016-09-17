@@ -32,7 +32,7 @@ var Util = {
 
 	},
 
-	isSpriteOffScreen: function(sprite, margin = 0) {
+	isSpriteOffScreen: function(sprite, margin) {
 		return sprite.position.x > canvas.width + margin
 				|| sprite.position.x < -margin
 				|| sprite.position.y > canvas.height + margin
