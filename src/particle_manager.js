@@ -4,13 +4,13 @@ var ParticleManager = {
 	particles: [],
 	deadParticles: [],
 	
-	burstAt: function(x, y, amount) {
+	burstAt: function(x, y, color, amount) {
 		for (i = 0; i < amount; i++) {
 			var particle = this.newParticle();
 			particle.sprite.x = x;
 			particle.sprite.y = y;
+			particle.sprite.tint = color;
 		}
-		console.log("num particles: " + this.particles.length);
 	},
 
 	newParticle: function() {
@@ -22,8 +22,8 @@ var ParticleManager = {
 			particleLayer.addChild(particle.sprite);
 		}
 		particle.alive = true;
-		particle.life = 500;
-		particle.startLife = 500;
+		particle.life = 700;
+		particle.startLife = 700;
 		particle.direction = Math.random() * Math.PI * 2;
 		particle.speed = Util.randomBetween(particle.minSpeed, particle.maxSpeed);
 		return particle;

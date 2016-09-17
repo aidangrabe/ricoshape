@@ -15,7 +15,7 @@ function Particle() {
 
 Particle.prototype.createGraphic = function() {
 
-	var radius = 6;
+	var radius = 12;
 
 	var graphics = new PIXI.Graphics();
 	graphics.beginFill(0xFFFFFF);

@@ -49,7 +49,7 @@ SquareSpawner.prototype.killSquare = function(square) {
 
 SquareSpawner.prototype.explodeSquare = function(square) {
 	this.killSquare(square);
-	ParticleManager.burstAt(square.sprite.x, square.sprite.y, 30);
+	ParticleManager.burstAt(square.sprite.x, square.sprite.y, square.sprite.tint, 30);
 }
 
 SquareSpawner.prototype.checkForCollisions = function(player) {
