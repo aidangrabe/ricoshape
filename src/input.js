@@ -38,8 +38,8 @@ var Mouse = {
 	},
 
 	onMouseMove: function(event) {
-		Mouse.x = event.clientX - canvas.offsetLeft;
-		Mouse.y = event.clientY - canvas.offsetTop;
+		Mouse.x = event.pageX - canvas.offsetLeft;
+		Mouse.y = event.pageY - canvas.offsetTop;
 	},
 
 	onMouseDown: function(event) {
