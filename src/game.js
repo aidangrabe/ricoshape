@@ -5,6 +5,7 @@ var squareSpawner;
 var baseColor;
 
 var gamePaused = false;
+var score = 0;
 
 function setup() {
 
@@ -17,9 +18,9 @@ function setup() {
 
 	squareSpawner = new SquareSpawner();
 
+	HUD.init();
 	PauseScreen.init();
 
-	Sound.load()
 }
 
 function gameLogic(delta) {
@@ -32,6 +33,8 @@ function gameLogic(delta) {
 	if (!gamePaused) {
 		updateGame(delta);
 	}
+
+	HUD.update(delta);
 	
 }
 
