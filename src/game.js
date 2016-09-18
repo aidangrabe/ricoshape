@@ -14,6 +14,8 @@ function setup() {
 	player.addToStage(stage, shadowLayer);
 
 	squareSpawner = new SquareSpawner();
+
+	Sound.load()
 }
 
 function gameLogic(delta) {
