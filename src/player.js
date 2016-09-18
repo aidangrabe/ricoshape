@@ -150,6 +150,8 @@ Player.prototype.shoot = function() {
 	var bullet = this.createBullet();
 	bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
 	bullet.sprite.position = this.sprite.position;
+
+	Sound.play('player.shoot');
 	
 }
 
@@ -185,6 +187,7 @@ Player.prototype.updateShadow = function(delta) {
 
 Player.prototype.hitBySquare = function(square) {
 	Quake.shake(50, 20);
+	Sound.play('player.hit');
 }
 
 Player.prototype.createTriangleGraphic = function(color, width, height) {

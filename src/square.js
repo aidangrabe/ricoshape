@@ -132,6 +132,7 @@ Square.prototype.isOffScreen = function(margin) {
 
 Square.prototype.hitByBullet = function(bullet) {
 	Quake.shake(10, 10);
+	Sound.play('square.hit');
 	LeaveBehindText.createAt(this.sprite.x, this.sprite.y, this.sprite.tint, this.score);
 }
 
