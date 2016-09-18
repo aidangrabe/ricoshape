@@ -1,6 +1,10 @@
 var Keyboard = {
 	keyStates: {},
 	onKeyDown: function(event) {
+		if (event.keyCode == Keys.SPACE) {
+			event.preventDefault();
+		}
+
 		Keyboard.keyStates[event.keyCode] = true;
 	},
 	onKeyUp: function(event) {
@@ -33,6 +37,7 @@ var Input = {
 	isMouseButtonDown: function(mouseButtonId) {
 		return Mouse.buttonStates[mouseButtonId];
 	}
+
 };
 
 var Mouse = {
