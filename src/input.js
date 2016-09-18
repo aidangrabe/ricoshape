@@ -1,5 +1,6 @@
 var Keyboard = {
 	keyStates: {},
+	keysPressedLastFrame: {},
 	onKeyDown: function(event) {
 		if (event.keyCode == Keys.SPACE) {
 			event.preventDefault();
@@ -7,9 +8,11 @@ var Keyboard = {
 
 		Keyboard.keyStates[event.keyCode] = true;
 	},
+
 	onKeyUp: function(event) {
 		Keyboard.keyStates[event.keyCode] = false;
 	}
+
 };
 
 var Keys = {
@@ -17,7 +20,8 @@ var Keys = {
 	LEFT: 37,
 	UP: 38,
 	RIGHT: 39,
-	DOWN: 40
+	DOWN: 40,
+	P: 80
 };
 
 var Input = {
@@ -36,6 +40,16 @@ var Input = {
 
 	isMouseButtonDown: function(mouseButtonId) {
 		return Mouse.buttonStates[mouseButtonId];
+	},
+
+	isKeyPressed: function(keyCode) {
+		var keyDown = Input.isKeyDown(keyCode);
+		var keyWasPressed = false;
+		if (keyDown && !Keyboard.keysPressedLastFrame[keyCode]) {
+			keyWasPressed = true;
+		}
+		Keyboard.keysPressedLastFrame[keyCode] = keyDown;
+		return keyWasPressed;
 	}
 
 };
