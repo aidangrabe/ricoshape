@@ -4,6 +4,8 @@ var player;
 var squareSpawner;
 var baseColor;
 
+var gamePaused = false;
+
 function setup() {
 
 	baseColor = Util.generateColor();
@@ -15,10 +17,25 @@ function setup() {
 
 	squareSpawner = new SquareSpawner();
 
+	PauseScreen.init();
+
 	Sound.load()
 }
 
 function gameLogic(delta) {
+
+	if (Input.isKeyPressed(Keys.P)) {
+		gamePaused = !gamePaused;
+		PauseScreen.setPauseMode(gamePaused);
+	}
+
+	if (!gamePaused) {
+		updateGame(delta);
+	}
+	
+}
+
+function updateGame(delta) {
 
 	ParticleManager.update(delta);
 
@@ -28,5 +45,5 @@ function gameLogic(delta) {
 	LeaveBehindText.update(delta);
 
 	squareSpawner.checkForCollisions(player);
-	
+
 }
