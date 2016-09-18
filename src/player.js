@@ -1,4 +1,7 @@
 var Player = function() {
+
+	this.color = Util.generateColorFrom(baseColor);
+	
 	this.sprite = this.createPlayerSprite();
 	this.shadow = this.createPlayerShadow();
 	this.rotationSpeed = 0.1;
@@ -33,7 +36,7 @@ Player.prototype.addToStage = function(stage, shadowLayer) {
 
 Player.prototype.createPlayerSprite = function() {
 	var size = Constants.SCREEN_UNIT;
-	return this.createTriangleGraphic(Util.generateColorFrom(baseColor), size, size);
+	return this.createTriangleGraphic(this.color, size, size);
 }
 
 Player.prototype.createPlayerShadow = function() {
@@ -150,6 +153,7 @@ Player.prototype.shoot = function() {
 	var bullet = this.createBullet();
 	bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
 	bullet.sprite.position = this.sprite.position;
+	bullet.sprite.tint = this.color;
 
 	Sound.play('player.shoot');
 	
