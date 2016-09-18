@@ -27,15 +27,7 @@ function gameLoop() {
 	renderer.render(rootContainer);
 }
 
-function setupInput() {
-	document.addEventListener('keydown', Keyboard.onKeyDown);
-	document.addEventListener('keyup', Keyboard.onKeyUp);
-	document.addEventListener('mousemove', Mouse.onMouseMove);
-	document.addEventListener('mousedown', Mouse.onMouseDown);
-	document.addEventListener('mouseup', Mouse.onMouseUp);
-}
-
-setupInput();
+Input.init();
 
 // start the game
 setup();

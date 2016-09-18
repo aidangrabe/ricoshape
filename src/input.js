@@ -17,6 +17,15 @@ var Keys = {
 };
 
 var Input = {
+
+	init: function() {
+		document.addEventListener('keydown', Keyboard.onKeyDown);
+		document.addEventListener('keyup', Keyboard.onKeyUp);
+		document.addEventListener('mousemove', Mouse.onMouseMove);
+		document.addEventListener('mousedown', Mouse.onMouseDown);
+		document.addEventListener('mouseup', Mouse.onMouseUp);
+	},
+
 	isKeyDown: function(keyCode) {
 		return Keyboard.keyStates[keyCode] == true;
 	},
