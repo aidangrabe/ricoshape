@@ -27,8 +27,19 @@ function gameLoop() {
 	renderer.render(rootContainer);
 }
 
+function load() {
+	LoadingScreen.init();
+
+	Sound.finishedLoading = loadComplete;
+	Sound.load();
+}
+
+function loadComplete() {
+	LoadingScreen.remove();
+	setup();
+	gameLoop();
+}
+
 Input.init();
 
-// start the game
-setup();
-gameLoop();
+load();
