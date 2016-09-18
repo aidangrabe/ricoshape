@@ -9,43 +9,30 @@ var Sound = {
 	audioPool: [],
 
 	load: function() {
+		createjs.Sound.addEventListener('fileload', this.soundLoaded);
 		for (sound in this.sounds) {
-			// update the resource so it points to the correct location
-			this.sounds[sound] = "res/audio/" + this.sounds[sound];
-
-			var audio = new Audio(this.sounds[sound]);
-			audio.addEventListener('canplaythrough', this.soundLoaded, false);
+			this.loadSound(sound);
 		}
 	},
 
-	play: function(soundName) {
-		var audio = this.audioPool.pop();
+	loadSound: function(soundId) {
+		createjs.Sound.registerSound({
+			id: soundId,
+			src: "res/audio/" + this.sounds[soundId]
+		})
+	},
 
-		if (audio === undefined) {
-			audio = new Audio();
-			audio.addEventListener('ended', this.soundFinishedPlaying)
-		}
-
-		audio.src = this.sounds[soundName];
-
-		console.log("soundPoolSize: " + this.audioPool.length);
-
-		audio.play();
+	play: function(soundId) {
+		createjs.Sound.play(soundId);
 	},
 
 	soundLoaded: function(event) {
 		var totalSounds = Object.keys(Sound.sounds).length;
 
 		Sound.soundsLoaded++;
-		console.log("num sounds loaded: " + totalSounds);
-		console.log("total sounds: " + totalSounds);
 		if (Sound.soundsLoaded == totalSounds) {
 			Sound.finishedLoading();
 		}
-	},
-
-	soundFinishedPlaying: function(event) {
-		Sound.audioPool.push(this);
 	},
 
 	finishedLoading: function() {
