@@ -100,7 +100,7 @@ Player.prototype.handleInput = function(delta) {
 		this.addMotion(Geom.ANGLE_DOWN, this.acceleration * delta);
 	}
 
-	if (Input.isKeyDown(this.SHOOT_KEY)) {
+	if (Input.isKeyDown(this.SHOOT_KEY) || Input.isMouseButtonDown(Mouse.Buttons.LEFT)) {
 		this.shoot();
 	}
 }
