@@ -142,7 +142,7 @@ Player.prototype.addMotion = function(direction, magnitude) {
 
 Player.prototype.shoot = function() {
 
-	if (this.shootTimer > 0) {
+	if (!this.sprite.visible || this.shootTimer > 0) {
 		return;
 	}
 
@@ -192,6 +192,14 @@ Player.prototype.updateShadow = function(delta) {
 Player.prototype.hitBySquare = function(square) {
 	Quake.shake(50, 20);
 	Sound.play('player.hit');
+	if (this.onHitBySquare != undefined) {
+		this.onHitBySquare();
+	}
+}
+
+Player.prototype.kill = function() {
+	this.sprite.visible = false;
+	this.shadow.visible = false;
 }
 
 Player.prototype.createTriangleGraphic = function(color, width, height) {

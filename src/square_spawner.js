@@ -58,10 +58,14 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 		if (!square.sprite.visible) {
 			continue;
 		}
-		if (Util.spriteCollidesWithSprite(square.sprite, player.sprite)) {
-			player.hitBySquare(square);
-			square.hitByPlayer(player);
-			this.explodeSquare(square);
+
+		// only check for Player-square collisions if Player is visible
+		if (player.sprite.visible) {
+			if (Util.spriteCollidesWithSprite(square.sprite, player.sprite)) {
+				player.hitBySquare(square);
+				square.hitByPlayer(player);
+				this.explodeSquare(square);
+			}
 		}
 
 		var bullets = player.bullets;

@@ -56,6 +56,11 @@ var Util = {
 		g += Math.random() * 40;
 		b += Math.random() * 40;
 		return r << 16 | g << 8 | b;
+	},
+
+	// pick a random element in the given array
+	pickRandom: function(haystack) {
+		return haystack[Math.floor(Math.random() * haystack.length)];
 	}
 
 };
