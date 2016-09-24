@@ -1,4 +1,6 @@
 function SquareSpawner() {
+	this.ONE_IN_X_CHANCE_TO_DROP_POWERUP = 10;
+	
 	this.squares = [];
 
 	// references any squares that have been destroyed so we can recycle them
@@ -45,6 +47,9 @@ SquareSpawner.prototype.spawn = function() {
 SquareSpawner.prototype.killSquare = function(square) {
 	square.sprite.visible = false;
 	this.deadSquares.push(square);
+	if (Util.oneIn(this.ONE_IN_X_CHANCE_TO_DROP_POWERUP)) {
+		PowerUpManager.createPowerUpAt(square.sprite.x, square.sprite.y);
+	}
 }
 
 SquareSpawner.prototype.explodeSquare = function(square) {
