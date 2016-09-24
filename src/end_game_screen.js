@@ -2,21 +2,23 @@ var EndGameScreen = {
 
 	insults: [
 		"Awful", "Terrible", "Wow", "Srsly!?", "OMG", "You suck", "Bad", "Almost not terrible", "Measly",
-		"Worthless", "Just no", "meh"
+		"Worthless", "Just no", "meh", "Pathetic"
 	],
 
 	init: function() {
 
-		var insultText = new PIXI.Text(Util.pickRandom(this.insults).toUpperCase());
+		var insultText = new PIXI.Text(this.randomInsult());
 		insultText.style = {
 			font: 'bold 52px Arial',
 			fill: Util.generateColorFrom(baseColor)
 		};
-		insultText.x = canvas.width / 2 - insultText.width / 2;
-		insultText.y = canvas.height / 2 - insultText.height / 2;
-		insultText.rotation = this.ROTATION;
+		insultText.x = canvas.width / 2;
+		insultText.y = canvas.height / 3;
 
-		stage.addChild(insultText);
+		insultText.pivot.x = insultText.width / 2;
+		insultText.pivot.y = insultText.height / 2;
+
+		hudLayer.addChild(insultText);
 
 		this.insultText = insultText;
 
@@ -35,7 +37,12 @@ var EndGameScreen = {
 	},
 
 	getRandomTextRotation: function() {
-		return -Math.PI / 16 + Math.random(Math.PI / 8);
+		var rotationBounds = Math.PI / 16;
+		return Util.randomBetween(-rotationBounds, rotationBounds);
+	},
+
+	randomInsult: function() {
+		return this.insults[Math.floor(Util.randomBetween(0, this.insults.length))];
 	}
 	
 }
