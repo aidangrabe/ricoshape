@@ -3,6 +3,7 @@ var Sound = {
 	sounds: {
 		'player.hit': 'player_explode.wav',
 		'player.shoot': 'player_shoot.wav',
+		'powerup': 'power_up.wav',
 		'square.hit': 'square_explode.wav'
 	},
 	soundsLoaded: 0,

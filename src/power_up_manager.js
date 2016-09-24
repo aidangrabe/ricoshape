@@ -65,6 +65,7 @@ var PowerUpManager = {
 	},
 
 	powerUpHitByPlayer: function(pup) {
+		Sound.play('powerup');
 		this.killPowerUp(pup);
 		var anim = this.createAnimation();
 		anim.sprite.x = pup.sprite.x;
