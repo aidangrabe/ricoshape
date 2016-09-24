@@ -13,6 +13,16 @@ var ParticleManager = {
 		}
 	},
 
+	burstInDirectionAt: function(x, y, color, direction, wiggle, amount) {
+		for (i = 0; i < amount; i++) {
+			var particle = this.newParticle();
+			particle.sprite.x = x;
+			particle.sprite.y = y;
+			particle.sprite.tint = color;
+			particle.direction = direction - wiggle + Math.random() * wiggle * 2;
+		}
+	},
+
 	newParticle: function() {
 		var particle = this.deadParticles.pop();
 		if (particle === undefined) {
