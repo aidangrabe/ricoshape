@@ -23,6 +23,8 @@ Particle.prototype.createGraphic = function() {
 	graphics.endFill();
 
 	graphics.cacheAsBitmap = true;
+	graphics.pivot.x = graphics.width / 2;
+	graphics.pivot.y = graphics.height / 2;
 
 	return graphics;
 
