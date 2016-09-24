@@ -15,7 +15,7 @@ var HUD = {
 
 		this.layer.addChild(this.scoreText);
 
-		stage.addChild(this.layer);
+		hudLayer.addChild(this.layer);
 
 	},
 
