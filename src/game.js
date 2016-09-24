@@ -53,10 +53,14 @@ function updateGame(delta) {
 	ParticleManager.update(delta);
 
 	squareSpawner.update(20);
+
+	PowerUpManager.update(delta);
+
 	player.update(delta / 16 * Constants.SCREEN_UNIT / 20);
 
 	LeaveBehindText.update(delta);
-
+	
+	PowerUpManager.checkForCollisions(player);
 	squareSpawner.checkForCollisions(player);
 
 }
