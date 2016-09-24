@@ -24,6 +24,10 @@ var Player = function() {
 	this.RIGHT_KEY = Keys.RIGHT;
 	this.SHOOT_KEY = Keys.SPACE;
 
+	this.smokeColors = [
+		0xFFFFFF, 0xEEEEEE, 0xFEFEFE, 0xEFEFEF
+	];
+
 }
 
 Player.prototype.addToStage = function(stage, shadowLayer) {
@@ -65,6 +69,8 @@ Player.prototype.update = function(delta) {
 	this.updateShadow(delta);
 	this.keepOnScreen(delta);
 	this.applyFriction(delta);
+
+	this.streamSmoke();
 
 }
 
@@ -220,4 +226,24 @@ Player.prototype.createTriangleGraphic = function(color, width, height) {
 	sprite.cacheAsBitmap = true;
 
 	return sprite;
+}
+
+Player.prototype.streamSmoke = function() {
+
+	// dont create any smoke when not visible
+	if (!this.sprite.visible) {
+		return;
+	}
+
+	var oppositeDir = Math.PI + this.sprite.rotation;
+	var length = this.sprite.width / 4;
+
+	ParticleManager.burstInDirectionAt(
+		this.sprite.x + Util.lengthDirX(length, oppositeDir),
+		this.sprite.y + Util.lengthDirY(length, oppositeDir),
+		this.smokeColors[~~Util.randomBetween(0, this.smokeColors.length)],
+		oppositeDir, // direction
+		0.7,	// wiggle
+		1		// amount
+		);
 }

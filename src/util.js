@@ -61,6 +61,14 @@ var Util = {
 	// pick a random element in the given array
 	pickRandom: function(haystack) {
 		return haystack[Math.floor(Math.random() * haystack.length)];
-	}
+	},
+
+	lengthDirX: function(length, dir) {
+		return Math.sin(dir) * length;
+	},
+
+	lengthDirY: function(length, dir) {
+		return -Math.cos(dir) * length;
+	},
 
 };
