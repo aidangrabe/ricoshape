@@ -45,6 +45,8 @@ var PowerUpManager = {
 			powerUpAnimationLayer.addChild(anim.sprite);
 		}
 		anim.sprite.visible = true;
+		anim.sprite.scale.x = 1;
+		anim.sprite.scale.y = 1;
 		return anim;
 	},
 
