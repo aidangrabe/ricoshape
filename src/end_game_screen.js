@@ -3,7 +3,7 @@ var EndGameScreen = {
 	insults: [
 		"Awful", "Terrible", "Srsly!?", "OMG", "You suck", "Bad", "Almost not terrible", "Measly",
 		"Worthless", "Just no", "meh", "Pathetic", "-_-", ":(", "Pwned!", "Cringeworthy", "Loser",
-		"Crap", "#iCantEven", "#NoFilter"
+		"Crap", "#iCantEven", "#NoFilter", "Mwahahaha", "Puny Human"
 	],
 
 	init: function() {
@@ -24,7 +24,7 @@ var EndGameScreen = {
 		this.insultText.visible = true;
 		this.scoreText.visible = true;
 
-		this.scoreText.text = "Score: " + score;
+		this.scoreText.text = score.toString();
 		this.scoreText.pivot.x = this.scoreText.width / 2;
 		this.scoreText.pivot.y = this.scoreText.height / 2;
 	},
@@ -40,7 +40,8 @@ var EndGameScreen = {
 	},
 
 	randomInsult: function() {
-		return this.insults[Math.floor(Util.randomBetween(0, this.insults.length))];
+		var randomIndex = Math.floor(Util.randomBetween(0, this.insults.length));
+		return this.insults[randomIndex].toUpperCase();
 	},
 
 	createInsultText: function() {
