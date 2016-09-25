@@ -6,10 +6,7 @@ var LoadingScreen = {
 		renderer.backgroundColor = Util.generateColor();
 
 		var loadingText = new PIXI.Text("Loading...");
-		loadingText.style = {
-			font: 'bold 52px Arial',
-			fill: '#FFFFFF'
-		};
+		loadingText.style = Fonts.Loading;
 		loadingText.x = canvas.width / 2 - loadingText.width / 2;
 		loadingText.y = canvas.height / 2 - loadingText.height / 2;
 

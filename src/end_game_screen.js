@@ -46,10 +46,8 @@ var EndGameScreen = {
 
 	createInsultText: function() {
 		var text = new PIXI.Text(this.randomInsult());
-		text.style = {
-			font: 'bold 52px Arial',
-			fill: Util.generateColorFrom(baseColor)
-		};
+		text.style = Fonts.EndGameScreen;
+		text.style.fill = Util.generateColorFrom(baseColor);
 		text.x = canvas.width / 2;
 		text.y = canvas.height / 3;
 
@@ -60,10 +58,8 @@ var EndGameScreen = {
 
 	createScoreText: function() {
 		var text = new PIXI.Text();
-		text.style = {
-			font: 'bold 52px Arial',
-			fill: Util.generateColorFrom(baseColor)
-		};
+		text.style = Fonts.EndGameScreen;
+		text.style.fill = Util.generateColorFrom(baseColor);
 		text.x = canvas.width / 2;
 		text.y = canvas.height / 2;
 		return text;

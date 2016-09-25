@@ -8,11 +8,6 @@ var LeaveBehindText = {
 	createAt: function(x, y, color, text) {
 		var newText = this.newText(text);
 
-		style = {
-			font: 'bold 52px Arial',
-			fill: color
-		};
-
 		newText.x = x;
 		newText.y = y;
 		newText.text = text;
@@ -20,7 +15,8 @@ var LeaveBehindText = {
 		newText.pivot.y = newText.height / 2;
 		newText.rotation = Util.randomBetween(-this.ROTATION, this.ROTATION);
 		newText.alpha = 1;
-		newText.style = style;
+		newText.style = Fonts.LeaveBehindText;
+		newText.style.fill = color;
 		newText.visible = true;
 	},
 
