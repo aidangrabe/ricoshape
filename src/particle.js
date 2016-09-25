@@ -2,6 +2,9 @@
 function Particle() {
 	
 	this.sprite = this.createGraphic();
+	this.shadow = this.createGraphic();
+	this.shadow.tint = 0x000000;
+
 	this.startLife = 0;
 	this.life = 0;
 	this.alive = true;
@@ -22,7 +25,7 @@ Particle.prototype.createGraphic = function() {
 	graphics.drawCircle(radius, radius, radius);
 	graphics.endFill();
 
-	graphics.cacheAsBitmap = true;
+	// graphics.cacheAsBitmap = true;
 	graphics.pivot.x = graphics.width / 2;
 	graphics.pivot.y = graphics.height / 2;
 

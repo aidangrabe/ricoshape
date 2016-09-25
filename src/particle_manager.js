@@ -30,6 +30,7 @@ var ParticleManager = {
 			particle = new Particle();
 			this.particles.push(particle);
 			particleLayer.addChild(particle.sprite);
+			shadowLayer.addChild(particle.shadow);
 		}
 		particle.alive = true;
 		particle.life = 700;
@@ -56,9 +57,15 @@ var ParticleManager = {
 					particle.sprite.x += Math.sin(particle.direction) * particle.speed / delta;
 					particle.sprite.y -= Math.cos(particle.direction) * particle.speed / delta;
 				}
+
+				particle.shadow.x = particle.sprite.x;
+				particle.shadow.y = particle.sprite.y;
+				particle.shadow.width = particle.sprite.width + 2;
+				particle.shadow.height = particle.sprite.height + 2;
 			}
 
 			particle.sprite.visible = particle.alive;
+			particle.shadow.visible = particle.alive;
 
 		}
 	}
