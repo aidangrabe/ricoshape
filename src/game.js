@@ -23,10 +23,12 @@ function setup() {
 		gameState = STATE_GAME_OVER;
 		EndGameScreen.show();
 		player.kill();
+		PowerUps.killAll();
 	};
 
 	squareSpawner = new SquareSpawner();
 
+	PowerUps.init();
 	HUD.init();
 	PauseScreen.init();
 	EndGameScreen.init();
@@ -54,12 +56,14 @@ function updateGame(delta) {
 
 	squareSpawner.update(20);
 
+	PowerUps.update(delta);
 	PowerUpManager.update(delta);
 
 	player.update(delta / 16 * Constants.SCREEN_UNIT / 20);
 
 	LeaveBehindText.update(delta);
 	
+	PowerUps.checkForCollisions(player, squareSpawner);
 	PowerUpManager.checkForCollisions(player);
 	squareSpawner.checkForCollisions(player);
 

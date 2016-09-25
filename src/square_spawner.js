@@ -72,8 +72,17 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 				this.explodeSquare(square);
 			}
 		}
+	}
+	
+	this.checkForBulletCollisions(player.bullets, player.killBullet.bind(player));
 
-		var bullets = player.bullets;
+}
+
+SquareSpawner.prototype.checkForBulletCollisions = function(bullets, killBullet) {
+	for (square of this.squares) {
+		if (!square.sprite.visible) {
+			continue;
+		}
 		for (bullet of bullets) {
 			if (!bullet.sprite.visible) {
 				continue;
@@ -82,10 +91,9 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 				bullet.hitBySquare(square);
 				square.hitByBullet(bullet);
 				
-				player.killBullet(bullet);
+				killBullet(bullet);
 				this.explodeSquare(square);
 			}
 		}
 	}
-
 }
