@@ -17,6 +17,8 @@ var Player = function() {
 	this.deadBullets = [];
 	this.bulletSpeed = 5;
 
+	this.guns = [];
+
 	// setup key map
 	this.DOWN_KEY = Keys.DOWN;
 	this.UP_KEY = Keys.UP;
@@ -45,7 +47,7 @@ Player.prototype.createPlayerSprite = function() {
 
 Player.prototype.createPlayerShadow = function() {
 	var size = Constants.SCREEN_UNIT + 4;
-	return this.createTriangleGraphic(0xFFFFFF, size, size);
+	return this.createTriangleGraphic(0x000000, size, size);
 }
 
 Player.prototype.update = function(delta) {
@@ -155,6 +157,10 @@ Player.prototype.shoot = function() {
 	// recoil in the opposite direction the player is facing
 	this.addMotion(Math.PI + this.sprite.rotation, this.recoilMagnitude);
 
+	for (gun of this.guns) {
+		gun.shoot(this);
+	}
+
 	this.shootTimer = this.shootInterval;
 	var bullet = this.createBullet();
 	bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
@@ -246,4 +252,18 @@ Player.prototype.streamSmoke = function() {
 		0.7,	// wiggle
 		1		// amount
 		);
+}
+
+Player.prototype.removeGun = function(gun) {
+	var indexOfGun = this.guns.indexOf(gun);
+	if (indexOfGun != -1) {
+		this.guns.splice(indexOfGun, 1);
+	}
+}
+
+Player.prototype.addGun = function(gun) {
+	var indexOfGun = this.guns.indexOf(gun);
+	if (indexOfGun == -1) {
+		this.guns.push(gun);
+	}
 }
