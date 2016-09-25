@@ -9,6 +9,8 @@ function Square() {
 
 	this.score = 0;
 	this.sprite = this.createSquareGraphic(0xFFFFFF, 32, 32);
+	this.shadow = this.createSquareGraphic(0x000000, 32, 32);
+	this.shadow.visible = false;
 	this.size = 1;
 	this.velocity = {
 		x: 0,
@@ -42,6 +44,12 @@ Square.prototype.reset = function() {
 
 	this.calculateScore();
 
+	this.shadow.x = this.sprite.x;
+	this.shadow.y = this.sprite.y;
+	this.shadow.width = this.sprite.width + 2;
+	this.shadow.height = this.sprite.height + 2;
+	this.shadow.visible = true;
+
 	if (Util.oneIn(2)) {
 		this.rotationSpeed *= -1;
 	}
@@ -63,6 +71,10 @@ Square.prototype.createSquareGraphic = function(color, width, height) {
 Square.prototype.update = function(delta) {
 	this.sprite.rotation += this.rotationSpeed * delta;
 	this.moveTowardsTarget(delta);
+
+	this.shadow.rotation = this.sprite.rotation;
+	this.shadow.x = this.sprite.x;
+	this.shadow.y = this.sprite.y;
 }
 
 Square.prototype.moveToStartingPoint = function() {

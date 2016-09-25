@@ -4,13 +4,14 @@ function SquareSpawner() {
 	this.squares = [];
 
 	// references any squares that have been destroyed so we can recycle them
-	this.deadSquares = [new Square()];
+	this.deadSquares = [];
 
 	// number of squares to spawn per second
 	this.spawnFrequency = 1;
 }
 
 SquareSpawner.prototype.update = function(delta) {
+
 	for (var square of this.squares) {
 		if (!square.sprite.visible) {
 			continue;
@@ -38,6 +39,7 @@ SquareSpawner.prototype.spawn = function() {
 	} else {
 		square = new Square();
 		stage.addChild(square.sprite);
+		shadowLayer.addChild(square.shadow);
 		this.squares.push(square);
 	}
 
@@ -46,6 +48,7 @@ SquareSpawner.prototype.spawn = function() {
 
 SquareSpawner.prototype.killSquare = function(square) {
 	square.sprite.visible = false;
+	square.shadow.visible = false;
 	this.deadSquares.push(square);
 	if (Util.oneIn(this.ONE_IN_X_CHANCE_TO_DROP_POWERUP)) {
 		PowerUpManager.createPowerUpAt(square.sprite.x, square.sprite.y);
