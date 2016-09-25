@@ -10,6 +10,7 @@ var Player = function() {
 	this.friction = 0.98;
 	this.velocity = {x: 0, y: 0};
 	this.recoilMagnitude = 0.8;
+	this.originalShootInterval = 10;
 
 	this.shootInterval = 10;
 	this.shootTimer = 0;

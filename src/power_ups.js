@@ -3,6 +3,7 @@ var PowerUps = {
 
 	powerups: [],
 	tripleShooterTimer: 0,
+	rapidFireTimer: 0,
 
 	init: function() {
 		this.powerups.push(Shield);
@@ -16,6 +17,12 @@ var PowerUps = {
 			player.removeGun(Guns.TripleShooter);
 		}
 
+		if (this.rapidFireTimer > 0) {
+			this.rapidFireTimer -= 1 / delta;
+		} else {
+			player.shootInterval = player.originalShootInterval;
+		}
+
 		for (pup of this.powerups) {
 			if (pup.active) {
 				pup.update(delta);
@@ -26,7 +33,8 @@ var PowerUps = {
 	powerUpFunctions: [
 		explodePowerUp,
 		enableShield,
-		tripleShooter
+		tripleShooter,
+		rapidFire
 	],
 
 	enableRandomPowerUp: function() {
@@ -134,4 +142,8 @@ function enableShield() {
 function tripleShooter() {
 	PowerUps.tripleShooterTimer = 30;
 	player.addGun(Guns.TripleShooter);
+}
+
+function rapidFire() {
+	player.shootInterval = player.shootInterval / 3 * 2;
 }
