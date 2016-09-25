@@ -3,6 +3,7 @@ function Particle() {
 	
 	this.sprite = this.createGraphic();
 	this.shadow = this.createGraphic();
+	this.shadow.visible = false;
 	this.shadow.tint = 0x000000;
 
 	this.startLife = 0;
