@@ -67,6 +67,9 @@ var PowerUpManager = {
 	powerUpHitByPlayer: function(pup) {
 		Sound.play('powerup');
 		this.killPowerUp(pup);
+
+		this.createRandomPowerUp();
+
 		var anim = this.createAnimation();
 		anim.sprite.x = pup.sprite.x;
 		anim.sprite.y = pup.sprite.y;
@@ -80,6 +83,10 @@ var PowerUpManager = {
 	killPowerUp: function(pup) {
 		pup.sprite.visible = false;
 		this.powerUpPool.push(pup);
+	},
+
+	createRandomPowerUp: function() {
+		PowerUps.enableRandomPowerUp();
 	}
 
 }
