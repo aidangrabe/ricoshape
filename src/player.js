@@ -91,6 +91,7 @@ Player.prototype.updateBullets = function(delta) {
 
 Player.prototype.killBullet = function(bullet) {
 	bullet.sprite.visible = false;
+	bullet.shadow.visible = false;
 	this.deadBullets.push(bullet);
 }
 
