@@ -50,7 +50,7 @@ var PowerUpManager = {
 		return anim;
 	},
 
-	checkForCollisions(player) {
+	checkForCollisions: function(player) {
 		if (!player.sprite.visible) {
 			return;
 		}
