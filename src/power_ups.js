@@ -83,6 +83,7 @@ var Shield = {
 		for (bullet of this.bullets) {
 			bullet.sprite.x = player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
 			bullet.sprite.y = player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
+			bullet.update(delta);
 			i++;
 		}
 	},
@@ -106,6 +107,7 @@ var Shield = {
 	},
 
 	killBullet: function(bullet) {
+		bullet.sprite.visible = false;
 		bullet.sprite.visible = false;
 		this.bulletPool.push(bullet);
 	},
@@ -145,5 +147,6 @@ function tripleShooter() {
 }
 
 function rapidFire() {
+	PowerUps.rapidFireTimer = 30;
 	player.shootInterval = player.shootInterval / 3 * 2;
 }

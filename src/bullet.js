@@ -1,5 +1,12 @@
 function Bullet() {
 	this.sprite = this.createBulletGraphic(0xFFFFFF, 8);
+	this.shadow = this.createBulletGraphic(0x000000, 8);
+
+	shadowLayer.addChild(this.shadow);	
+
+	this.shadow.width = this.sprite.width + 2;
+	this.shadow.height = this.sprite.height + 2;
+
 	this.reset(canvas.width / 2, canvas.height / 2);
 	this.velocity = {
 		x: 0,
@@ -15,11 +22,16 @@ Bullet.prototype.setSpeedAndDirection = function(speed, direction) {
 Bullet.prototype.update = function(delta) {
 	this.sprite.position.x += this.velocity.x * delta;
 	this.sprite.position.y += this.velocity.y * delta;
+	this.shadow.x = this.sprite.x;
+	this.shadow.y = this.sprite.y;
+	this.shadow.visible = this.sprite.visible;
 }
 
 Bullet.prototype.reset = function(x, y) {
 	this.sprite.position.x = x;
 	this.sprite.position.y = y;
+	this.shadow.position.x = x;
+	this.shadow.position.y = y;
 }
 
 Bullet.prototype.hitBySquare = function(square) {
