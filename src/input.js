@@ -21,7 +21,11 @@ var Keys = {
 	UP: 38,
 	RIGHT: 39,
 	DOWN: 40,
-	P: 80
+	A: 65,
+	S: 83,
+	D: 68,
+	P: 80,
+	W: 87
 };
 
 var Input = {

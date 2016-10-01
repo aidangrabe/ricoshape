@@ -21,10 +21,10 @@ var Player = function() {
 	this.guns = [];
 
 	// setup key map
-	this.DOWN_KEY = Keys.DOWN;
-	this.UP_KEY = Keys.UP;
-	this.LEFT_KEY = Keys.LEFT;
-	this.RIGHT_KEY = Keys.RIGHT;
+	this.DOWN_KEY = Keys.S;
+	this.UP_KEY = Keys.W;
+	this.LEFT_KEY = Keys.A;
+	this.RIGHT_KEY = Keys.D;
 	this.SHOOT_KEY = Keys.SPACE;
 
 	this.smokeColors = [
