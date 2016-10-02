@@ -22,8 +22,9 @@ var Keys = {
 	RIGHT: 39,
 	DOWN: 40,
 	A: 65,
-	S: 83,
 	D: 68,
+	F: 70,
+	S: 83,
 	P: 80,
 	W: 87
 };
@@ -70,8 +71,11 @@ var Mouse = {
 	},
 
 	onMouseMove: function(event) {
-		Mouse.x = event.pageX - canvas.offsetLeft;
-		Mouse.y = event.pageY - canvas.offsetTop;
+		var scaleFactorX = canvas.width / canvas.getBoundingClientRect().width;
+		var scaleFactorY = canvas.height / canvas.getBoundingClientRect().height;
+
+		Mouse.x = (event.pageX - canvas.offsetLeft) * scaleFactorX;
+		Mouse.y = (event.pageY - canvas.offsetTop) * scaleFactorY;
 	},
 
 	onMouseDown: function(event) {

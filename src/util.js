@@ -71,4 +71,14 @@ var Util = {
 		return -Math.cos(dir) * length;
 	},
 
+	setFullscreen: function(fullscreen) {
+		if (fullscreen) {
+			canvas.style.width = "100%";
+			canvas.style.height = "100%";
+		} else {
+			canvas.style.width = canvas.width + "px";
+			canvas.style.height = canvas.height + "px";
+		}
+	}
+
 };

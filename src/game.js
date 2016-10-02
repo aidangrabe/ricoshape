@@ -42,6 +42,10 @@ function gameLogic(delta) {
 		PauseScreen.setPauseMode(gamePaused);
 	}
 
+	if (Input.isKeyPressed(Keys.F)) {
+		Util.setFullscreen(true);
+	}
+
 	if (!gamePaused) {
 		updateGame(delta);
 	}
