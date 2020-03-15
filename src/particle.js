@@ -10,9 +10,9 @@ function Particle() {
 	this.life = 0;
 	this.alive = true;
 	this.direction = 0;
-	this.speed = 3;
-	this.maxSpeed = 20;
-	this.minSpeed = 12;
+	this.speed = 0;
+	this.maxSpeed = 3;
+	this.minSpeed = 0.8;
 	this.scale = 1;
 
 }

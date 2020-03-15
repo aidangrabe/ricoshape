@@ -23,7 +23,7 @@ SquareSpawner.prototype.update = function(delta) {
 		}
 	}
 
-	var diceRoll = ~~(Math.random() * (1000 / delta));
+	var diceRoll = ~~(Math.random() * (60 * delta));
 	if (diceRoll == 1) {
 		this.spawn();
 	}

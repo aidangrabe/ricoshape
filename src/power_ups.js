@@ -12,13 +12,13 @@ var PowerUps = {
 	update: function(delta) {
 
 		if (this.tripleShooterTimer > 0) {
-			this.tripleShooterTimer -= 1 / delta;
+			this.tripleShooterTimer -= 1 * delta;
 		} else {
 			player.removeGun(Guns.TripleShooter);
 		}
 
 		if (this.rapidFireTimer > 0) {
-			this.rapidFireTimer -= 1 / delta;
+			this.rapidFireTimer -= 1 * delta;
 		} else {
 			player.shootInterval = player.originalShootInterval;
 		}

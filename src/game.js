@@ -58,12 +58,12 @@ function updateGame(delta) {
 
 	ParticleManager.update(delta);
 
-	squareSpawner.update(20);
+	squareSpawner.update(delta);
 
 	PowerUps.update(delta);
 	PowerUpManager.update(delta);
 
-	player.update(delta / 16 * Constants.SCREEN_UNIT / 20);
+	player.update(delta);
 
 	LeaveBehindText.update(delta);
 	

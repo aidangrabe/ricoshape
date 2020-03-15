@@ -30,6 +30,8 @@ rootContainer.addChild(hudLayer);
 class Main {
 
 	constructor() {
+		this.gameSpeedMultiplier = 1;
+
 		this.ticker = new PIXI.Ticker();
 		this.ticker.stop();
 	}
@@ -54,7 +56,7 @@ class Main {
 		this.ticker.add((delta) => {
 			// global function in game.js
 			// 16 so we can maintain the backwards compatibility with old Framework
-			gameLogic(delta * 16);
+			gameLogic(delta * this.gameSpeedMultiplier);
 			renderer.render(rootContainer);
 		});
 

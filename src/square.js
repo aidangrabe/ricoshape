@@ -1,6 +1,6 @@
 function Square() {
-	this.MAX_SPEED = 0.3;
-	this.MIN_SPEED = 0.1;
+	this.MAX_SPEED = 5;
+	this.MIN_SPEED = 2;
 	this.MAX_SIZE  = 2.5;
 	this.MIN_SIZE  = 1;
 
@@ -117,7 +117,6 @@ Square.prototype.createRandomTargetPoint = function() {
 }
 
 Square.prototype.moveTowardsTarget = function(delta) {
-
 	this.sprite.position.x += this.velocity.x * delta;
 	this.sprite.position.y -= this.velocity.y * delta;
 

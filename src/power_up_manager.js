@@ -99,7 +99,7 @@ var PowerUp = function() {
 }
 
 PowerUp.prototype.update = function(delta) {
-	this.scaleDelta += (5 / delta) % Math.PI;
+	this.scaleDelta += (delta / 8) % Math.PI;
 
 	var scale = 0.75 + Util.lengthDirX(0.25, this.scaleDelta);
 	this.sprite.scale.x = scale;
@@ -127,10 +127,10 @@ PowerUpAnimation = function() {
 }
 
 PowerUpAnimation.prototype.update = function(delta) {
-	var scale = (this.sprite.scale.x * 5 / delta);
+	var scale = (this.sprite.scale.x * delta / 16);
 	this.sprite.scale.x += scale;
 	this.sprite.scale.y += scale;
-	this.sprite.alpha -= 1 / delta;
+	this.sprite.alpha -= 1 * delta / 100;
 	if (this.sprite.alpha < 0) {
 		PowerUpManager.killAnimation(this);
 	}

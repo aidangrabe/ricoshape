@@ -16,7 +16,7 @@ var Player = function() {
 	this.shootTimer = 0;
 	this.bullets = [];
 	this.deadBullets = [];
-	this.bulletSpeed = 5;
+	this.bulletSpeed = 8;
 
 	this.guns = [];
 
