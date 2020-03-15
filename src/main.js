@@ -1,16 +1,23 @@
 
-var canvas = document.getElementById("game-canvas");
-var renderer = PIXI.autoDetectRenderer({width: canvas.width, height: canvas.height, view: canvas, antialias: true});
+const canvas = document.getElementById("game-canvas");
+const renderer = PIXI.autoDetectRenderer({
+	width: canvas.width,
+	height: canvas.height,
+	view: canvas,
+	antialias: true
+});
 
-var rootContainer = new PIXI.Container();
-var shadowLayer = new PIXI.Container();
-var particleLayer = new PIXI.Container();
-var powerUpAnimationLayer = new PIXI.Container();
-var hudLayer = new PIXI.Container();
-var stage = new PIXI.Container();
-var lastFrameMillis = Date.now();
+const rootContainer = new PIXI.Container();
 
-var Constants = {
+// layers
+const shadowLayer = new PIXI.Container();
+const particleLayer = new PIXI.Container();
+const powerUpAnimationLayer = new PIXI.Container();
+const hudLayer = new PIXI.Container();
+
+const stage = new PIXI.Container();
+
+const Constants = {
 	SCREEN_UNIT: canvas.width / 20
 };
 
@@ -20,30 +27,43 @@ rootContainer.addChild(particleLayer);
 rootContainer.addChild(stage);
 rootContainer.addChild(hudLayer);
 
-function gameLoop() {
-	var nowMillis = Date.now();
-	var delta = nowMillis - lastFrameMillis;
-	lastFrameMillis = nowMillis;
+class Main {
 
-	requestAnimationFrame(gameLoop);
+	constructor() {
+		this.ticker = new PIXI.Ticker();
+		this.ticker.stop();
+	}
 
-	gameLogic(delta);
-	renderer.render(rootContainer);
-}
+	load() {
+		LoadingScreen.init();
 
-function load() {
-	LoadingScreen.init();
+		Sound.finishedLoading = (_) => { this.onLoadComplete() };
+		Sound.load();
+	}
 
-	Sound.finishedLoading = loadComplete;
-	Sound.load();
-}
+	onLoadComplete() {
+		LoadingScreen.remove();
 
-function loadComplete() {
-	LoadingScreen.remove();
-	setup();
-	gameLoop();
+		// global function in game.js
+		setup();
+
+		this.startGameLoop();
+	}
+
+	startGameLoop() {
+		this.ticker.add((delta) => {
+			// global function in game.js
+			// 16 so we can maintain the backwards compatibility with old Framework
+			gameLogic(delta * 16);
+			renderer.render(rootContainer);
+		});
+
+		this.ticker.start();
+	}
+
 }
 
 Input.init();
 
-load();
+const main = new Main();
+main.load();
