@@ -12,7 +12,6 @@ var gamePaused = false;
 var score = 0;
 
 function setup() {
-
 	baseColor = Util.generateColor();
 
 	renderer.backgroundColor = baseColor;

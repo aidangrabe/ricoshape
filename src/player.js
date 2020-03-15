@@ -1,5 +1,4 @@
-var Player = function() {
-
+const Player = function() {
 	this.color = Util.generateColorFrom(baseColor);
 	
 	this.sprite = this.createPlayerSprite();
@@ -42,12 +41,12 @@ Player.prototype.addToStage = function(stage, shadowLayer) {
 }
 
 Player.prototype.createPlayerSprite = function() {
-	var size = Constants.SCREEN_UNIT;
+	const size = Constants.SCREEN_UNIT;
 	return this.createTriangleGraphic(this.color, size, size);
 }
 
 Player.prototype.createPlayerShadow = function() {
-	var size = Constants.SCREEN_UNIT + 4;
+	const size = Constants.SCREEN_UNIT + 4;
 	return this.createTriangleGraphic(0x000000, size, size);
 }
 
@@ -78,7 +77,7 @@ Player.prototype.update = function(delta) {
 }
 
 Player.prototype.updateBullets = function(delta) {
-	for (bullet of this.bullets) {
+	for (let bullet of this.bullets) {
 		if (!bullet.sprite.visible) {
 			continue;
 		}
@@ -96,7 +95,6 @@ Player.prototype.killBullet = function(bullet) {
 }
 
 Player.prototype.handleInput = function(delta) {
-
 	if (Input.isKeyDown(this.LEFT_KEY)) {
 		this.addMotion(Geom.ANGLE_LEFT, this.acceleration * delta);
 	}
@@ -134,10 +132,8 @@ Player.prototype.keepOnScreen = function(delta) {
 }
 
 Player.prototype.applyFriction = function(delta) {
-
 	this.velocity.x = this.dampen(this.velocity.x, this.friction, this.acceleration);
 	this.velocity.y = this.dampen(this.velocity.y, this.friction, this.acceleration);
-
 }
 
 Player.prototype.applyVector = function(vector) {
@@ -151,7 +147,6 @@ Player.prototype.addMotion = function(direction, magnitude) {
 }
 
 Player.prototype.shoot = function() {
-
 	if (!this.sprite.visible || this.shootTimer > 0) {
 		return;
 	}
@@ -159,23 +154,22 @@ Player.prototype.shoot = function() {
 	// recoil in the opposite direction the player is facing
 	this.addMotion(Math.PI + this.sprite.rotation, this.recoilMagnitude);
 
-	for (gun of this.guns) {
+	for (let gun of this.guns) {
 		gun.shoot(this);
 	}
 
 	this.shootTimer = this.shootInterval;
-	var bullet = this.createBullet();
+
+	const bullet = this.createBullet();
 	bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
 	bullet.sprite.position = this.sprite.position;
 	bullet.sprite.tint = this.color;
 
 	Sound.play('player.shoot');
-	
 }
 
 Player.prototype.createBullet = function() {
-
-	var bullet;
+	let bullet;
 	if (this.deadBullets.length > 0) {
 		bullet = this.deadBullets.pop();
 	} else {
@@ -217,7 +211,7 @@ Player.prototype.kill = function() {
 }
 
 Player.prototype.createTriangleGraphic = function(color, width, height) {
-	var sprite = new PIXI.Graphics();
+	const sprite = new PIXI.Graphics();
 
 	sprite.beginFill(color);
 	sprite.drawPolygon([
@@ -243,8 +237,8 @@ Player.prototype.streamSmoke = function() {
 		return;
 	}
 
-	var oppositeDir = Math.PI + this.sprite.rotation;
-	var length = this.sprite.width / 4;
+	const oppositeDir = Math.PI + this.sprite.rotation;
+	const length = this.sprite.width / 4;
 
 	ParticleManager.burstInDirectionAt(
 		this.sprite.x + Util.lengthDirX(length, oppositeDir),
@@ -257,14 +251,14 @@ Player.prototype.streamSmoke = function() {
 }
 
 Player.prototype.removeGun = function(gun) {
-	var indexOfGun = this.guns.indexOf(gun);
+	const indexOfGun = this.guns.indexOf(gun);
 	if (indexOfGun != -1) {
 		this.guns.splice(indexOfGun, 1);
 	}
 }
 
 Player.prototype.addGun = function(gun) {
-	var indexOfGun = this.guns.indexOf(gun);
+	const indexOfGun = this.guns.indexOf(gun);
 	if (indexOfGun == -1) {
 		this.guns.push(gun);
 	}
