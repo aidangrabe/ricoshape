@@ -1,6 +1,6 @@
 
 var canvas = document.getElementById("game-canvas");
-var renderer = PIXI.autoDetectRenderer(canvas.width, canvas.height, {view: canvas, antialias: true});
+var renderer = PIXI.autoDetectRenderer({width: canvas.width, height: canvas.height, view: canvas, antialias: true});
 
 var rootContainer = new PIXI.Container();
 var shadowLayer = new PIXI.Container();
