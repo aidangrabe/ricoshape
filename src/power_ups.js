@@ -1,5 +1,7 @@
+const TIME_TRIPLE_SHOOT = 240; // 4 seconds
+const TIME_RAPID_FIRE = 360; // 6 seconds
 
-var PowerUps = {
+const PowerUps = {
 
 	powerups: [],
 	tripleShooterTimer: 0,
@@ -23,7 +25,7 @@ var PowerUps = {
 			player.shootInterval = player.originalShootInterval;
 		}
 
-		for (pup of this.powerups) {
+		for (let pup of this.powerups) {
 			if (pup.active) {
 				pup.update(delta);
 			}
@@ -43,13 +45,13 @@ var PowerUps = {
 	},
 
 	checkForCollisions: function(player, squareSpawner) {
-		for (pup of this.powerups) {
+		for (let pup of this.powerups) {
 			pup.checkForCollisions(player, squareSpawner);
 		}
 	},
 
 	killAll: function() {
-		for (pup of this.powerups) {
+		for (let pup of this.powerups) {
 			pup.kill();
 		}	
 	}
@@ -62,14 +64,16 @@ var Shield = {
 	numBulletsInShield: 6,
 	bullets: [],
 	bulletPool: [],
+
+	// radians
 	angle: 0,
 
 	reset: function() {
 		this.kill();
 		this.bullets = [];
 
-		for (i = 0; i < this.numBulletsInShield; i++) {
-			var bullet = this.createBullet();
+		for (let i = 0; i < this.numBulletsInShield; i++) {
+			const bullet = this.createBullet();
 			bullet.sprite.tint = player.color;
 			this.bullets.push(bullet);
 		}
@@ -77,10 +81,12 @@ var Shield = {
 	},
 
 	update: function(delta) {
-		this.angle += 1 / delta;
-		var angleDelta = Math.PI * 2 / this.numBulletsInShield;
-		i = 0;
-		for (bullet of this.bullets) {
+		this.angle += 1 * (delta / 16);
+		const angleDelta = Math.PI * 2 / this.numBulletsInShield;
+
+		let i = 0;
+
+		for (let bullet of this.bullets) {
 			bullet.sprite.x = player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
 			bullet.sprite.y = player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
 			bullet.update(delta);
@@ -89,7 +95,7 @@ var Shield = {
 	},
 
 	createBullet: function() {
-		var bullet = this.bulletPool.pop();
+		let bullet = this.bulletPool.pop();
 		if (bullet === undefined) {
 			bullet = new Bullet();
 			this.bullets.push();
@@ -113,7 +119,7 @@ var Shield = {
 	},
 
 	kill: function() {
-		for (bullet of this.bullets) {
+		for (let bullet of this.bullets) {
 			this.killBullet(bullet);
 		}
 	}
@@ -122,12 +128,12 @@ var Shield = {
 
 // shoot a load of bullets out from where the player is
 function explodePowerUp() {
-	var numberOfBullets = 12;
-	var circle = Math.PI * 2;
-	var angleDelta = circle / numberOfBullets;
+	const numberOfBullets = 12;
+	const circle = Math.PI * 2;
+	const angleDelta = circle / numberOfBullets;
 
-	for (i = 0; i < numberOfBullets; i++) {
-		var bullet = player.createBullet();
+	for (let i = 0; i < numberOfBullets; i++) {
+		const bullet = player.createBullet();
 		bullet.sprite.x = player.sprite.x;
 		bullet.sprite.y = player.sprite.y;
 		bullet.setSpeedAndDirection(player.bulletSpeed, angleDelta * i);
@@ -142,11 +148,11 @@ function enableShield() {
 }
 
 function tripleShooter() {
-	PowerUps.tripleShooterTimer = 30;
+	PowerUps.tripleShooterTimer = TIME_TRIPLE_SHOOT;
 	player.addGun(Guns.TripleShooter);
 }
 
 function rapidFire() {
-	PowerUps.rapidFireTimer = 30;
+	PowerUps.rapidFireTimer = TIME_RAPID_FIRE;
 	player.shootInterval = player.shootInterval / 3 * 2;
 }
