@@ -3,7 +3,7 @@ var EndGameScreen = {
 	insults: [
 		"Awful", "Terrible", "Srsly!?", "OMG", "You suck", "Bad", "Almost not terrible", "Measly",
 		"Worthless", "Just no", "meh", "Pathetic", "-_-", ":(", "Pwned!", "Cringeworthy", "Loser",
-		"Crap", "#iCantEven", "#NoFilter", "Mwahahaha", "Puny Human"
+		"Crap", "#iCantEven", "#NoFilter", "Mwahahaha", "Puny Human", "Ya basic"
 	],
 
 	init: function() {
