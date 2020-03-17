@@ -1,15 +1,15 @@
 // main game file
 
-var STATE_GAME = 0;
-var STATE_GAME_OVER = 1;
+const STATE_GAME = 0;
+const STATE_GAME_OVER = 1;
 
-var player;
-var squareSpawner;
-var baseColor;
+let player;
+let squareSpawner;
+let baseColor;
 
-var gameState = STATE_GAME;
-var gamePaused = false;
-var score = 0;
+let gameState = STATE_GAME;
+let gamePaused = false;
+let score = 0;
 
 function setup() {
 	baseColor = Util.generateColor();

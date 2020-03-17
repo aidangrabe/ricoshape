@@ -111,7 +111,8 @@ Player.prototype.handleInput = function(delta) {
 		this.addMotion(Geom.ANGLE_DOWN, this.acceleration * delta);
 	}
 
-	if (Input.isKeyDown(this.SHOOT_KEY) || Input.isMouseButtonDown(Mouse.Buttons.LEFT)) {
+	// TODO pointer index?
+	if (Input.isPointerDown(0)) {
 		this.shoot();
 	}
 }

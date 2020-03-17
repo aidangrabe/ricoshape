@@ -1,7 +1,7 @@
-var Keyboard = {
+const Keyboard = {
 	keyStates: {},
 	keysPressedLastFrame: {},
-	onKeyDown: function(event) {
+	onKeyDown: function (event) {
 		if (event.keyCode == Keys.SPACE) {
 			event.preventDefault();
 		}
@@ -9,13 +9,13 @@ var Keyboard = {
 		Keyboard.keyStates[event.keyCode] = true;
 	},
 
-	onKeyUp: function(event) {
+	onKeyUp: function (event) {
 		Keyboard.keyStates[event.keyCode] = false;
 	}
 
 };
 
-var Keys = {
+const Keys = {
 	SPACE: 32,
 	LEFT: 37,
 	UP: 38,
@@ -29,27 +29,33 @@ var Keys = {
 	W: 87
 };
 
-var Input = {
+const Input = {
 
-	init: function() {
+	init: function (renderer) {
+		this.touchHandler = new TouchHandler();
+		const interaction = renderer.plugins.interaction;
+
+		// keyboard input
 		document.addEventListener('keydown', Keyboard.onKeyDown);
 		document.addEventListener('keyup', Keyboard.onKeyUp);
-		document.addEventListener('mousemove', Mouse.onMouseMove);
-		document.addEventListener('mousedown', Mouse.onMouseDown);
-		document.addEventListener('mouseup', Mouse.onMouseUp);
+
+		// mouse/touch
+		interaction.on('pointerdown', (event) => { this.touchHandler.onTouchDown(event) });
+		interaction.on('pointermove', (event) => { this.touchHandler.onTouchMove(event) });
+		interaction.on('pointerup', (event) => { this.touchHandler.onTouchUp(event) });
 	},
 
-	isKeyDown: function(keyCode) {
+	isPointerDown: function (index) {
+		return this.touchHandler.touches[index].pressed;
+	},
+
+	isKeyDown: function (keyCode) {
 		return Keyboard.keyStates[keyCode] == true;
 	},
 
-	isMouseButtonDown: function(mouseButtonId) {
-		return Mouse.buttonStates[mouseButtonId];
-	},
-
-	isKeyPressed: function(keyCode) {
-		var keyDown = Input.isKeyDown(keyCode);
-		var keyWasPressed = false;
+	isKeyPressed: function (keyCode) {
+		const keyDown = Input.isKeyDown(keyCode);
+		let keyWasPressed = false;
 		if (keyDown && !Keyboard.keysPressedLastFrame[keyCode]) {
 			keyWasPressed = true;
 		}
@@ -59,31 +65,100 @@ var Input = {
 
 };
 
-var Mouse = {
+class TouchHandler {
 
-	x: 0,
-	y: 0,
-	buttonStates: {},
-	Buttons: {
-		LEFT: 0,
-		MIDDLE: 1,
-		RIGHT: 2
-	},
+	constructor() {
+		const maxNumTouches = 5;
 
-	onMouseMove: function(event) {
-		var scaleFactorX = canvas.width / canvas.getBoundingClientRect().width;
-		var scaleFactorY = canvas.height / canvas.getBoundingClientRect().height;
+		this.touches = {};
 
-		Mouse.x = (event.pageX - canvas.offsetLeft) * scaleFactorX;
-		Mouse.y = (event.pageY - canvas.offsetTop) * scaleFactorY;
-	},
-
-	onMouseDown: function(event) {
-		Mouse.buttonStates[event.button] = true;
-	},
-
-	onMouseUp: function(event) {
-		Mouse.buttonStates[event.button] = false;
+		// initialise the touches
+		for (let i = 0; i < maxNumTouches; i++) {
+			this.touches[i] = {
+				x: -1,
+				y: -1,
+				pressed: false
+			}
+		}
 	}
 
+	onTouchDown(event) {
+		this.updateTouches(event, true);
+	}
+
+	onTouchMove(event) {
+		this.updateTouches(event, false);
+	}
+
+	onTouchUp(event) {
+		const originalEvent = event.data.originalEvent;
+
+		if (event.data.pointerType == 'mouse') {
+			const index = originalEvent.button;
+			this.touches[index].pressed = false;
+			return;
+		}
+
+		const changedTouches = event.data.originalEvent.changedTouches;
+
+		for (let touch of changedTouches) {
+			this.touches[touch.identifier].pressed = false;
+		}
+	}
+
+	updateTouches(event, pressed) {
+		const originalEvent = event.data.originalEvent;
+
+		if (event.data.pointerType == 'mouse') {
+			let index = originalEvent.button;
+
+			if (index < 0) {
+				index = 0;
+			}
+
+			if (pressed) {
+				this.touches[index].pressed = true;
+			}
+
+			this.updateTouchPoint(index, event.data.originalEvent.pageX, event.data.originalEvent.pageY);
+
+			Mouse.x = this.touches[index].x;
+			Mouse.y = this.touches[index].y;
+
+			return;
+		}
+
+		const touches = event.data.originalEvent.changedTouches;
+
+		for (let touch of touches) {
+			const index = touch.identifier
+			this.touches[index].pressed = true;
+			this.updateTouchPoint(index, touch.pageX, touch.pageY);
+
+			// mouse will take the latest touch point values
+			Mouse.x = this.touches[index].x;
+			Mouse.y = this.touches[index].y;
+		}
+	}
+
+	updateTouchPoint(index, x, y) {
+		this.touches[index].x = this.normalizeX(x);
+		this.touches[index].y = this.normalizeY(y);
+	}
+
+	normalizeX(x) {
+		const scaleFactorX = canvas.width / canvas.getBoundingClientRect().width;
+		return (x - canvas.offsetLeft) * scaleFactorX;
+	}
+
+	normalizeY(y) {
+		const scaleFactorY = canvas.height / canvas.getBoundingClientRect().height;
+		return (y - canvas.offsetTop) * scaleFactorY;
+	}
+
+}
+
+const Mouse = {
+	x: 0,
+	y: 0
 };

@@ -1,5 +1,6 @@
 
 const canvas = document.getElementById("game-canvas");
+
 const renderer = PIXI.autoDetectRenderer({
 	width: canvas.width,
 	height: canvas.height,
@@ -65,7 +66,7 @@ class Main {
 
 }
 
-Input.init();
+Input.init(renderer);
 
 const main = new Main();
 main.load();
