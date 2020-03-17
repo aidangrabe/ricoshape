@@ -5,31 +5,38 @@
 <head>
 	<title>Ricoshape</title>
 	<style>
-		body, html {
+		body,
+		html {
 			height: 100%;
 			margin: 0;
 			padding: 0;
 		}
+
 		canvas {
 			display: block;
 			margin: auto;
 		}
 	</style>
+	<script type="text/javascript">
+		window.onerror = function (msg, url, linenumber) {
+			alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
+		};
+	</script>
 </head>
 
 <body>
-	
+
 	<canvas id="game-canvas" width="640" height="480">Canvas not supported :(</canvas>
 
-	<script type="text/javascript" src="lib/pixijs-5.1.6.js" ></script>
-	<script type="text/javascript" src="lib/soundjs-1.0.0.js" ></script>
+	<script type="text/javascript" src="lib/pixijs-5.1.6.js"></script>
+	<script type="text/javascript" src="lib/soundjs-1.0.0.js"></script>
 
 	<script type="text/javascript" src="src/util.js"></script>
 	<script type="text/javascript" src="src/geom.js"></script>
 	<script type="text/javascript" src="src/input.js"></script>
 	<script type="text/javascript" src="src/sound.js"></script>
 	<script type="text/javascript" src="src/fonts.js"></script>
-	
+
 	<script type="text/javascript" src="src/hud.js"></script>
 	<script type="text/javascript" src="src/power_ups.js"></script>
 	<script type="text/javascript" src="src/power_up_manager.js"></script>
@@ -42,7 +49,7 @@
 	<script type="text/javascript" src="src/particle.js"></script>
 	<script type="text/javascript" src="src/quake.js"></script>
 	<script type="text/javascript" src="src/particle_manager.js"></script>
-	
+
 	<script type="text/javascript" src="src/leave_behind_text.js"></script>
 	<script type="text/javascript" src="src/bullet.js"></script>
 	<script type="text/javascript" src="src/player.js"></script>
