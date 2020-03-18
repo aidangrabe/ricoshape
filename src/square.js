@@ -140,10 +140,12 @@ Square.prototype.isOffScreen = function(margin) {
 }
 
 Square.prototype.hitByBullet = function(bullet) {
+	const scoreEarned = ScoreKeeper.squareKill(this);
+
 	Quake.shake(10, 10);
-	score += this.score;
 	Sound.play('square.hit');
-	LeaveBehindText.createAt(this.sprite.x, this.sprite.y, this.sprite.tint, this.score);
+
+	LeaveBehindText.createAt(this.sprite.x, this.sprite.y, this.sprite.tint, scoreEarned);
 }
 
 Square.prototype.calculateScore = function() {

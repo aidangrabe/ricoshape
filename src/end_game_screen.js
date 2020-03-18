@@ -1,13 +1,13 @@
-var EndGameScreen = {
+const EndGameScreen = {
 
 	insults: [
 		"Awful", "Terrible", "Srsly!?", "OMG", "You suck", "Bad", "Almost not terrible", "Measly",
 		"Worthless", "Just no", "meh", "Pathetic", "-_-", ":(", "Pwned!", "Cringeworthy", "Loser",
-		"Crap", "#iCantEven", "#NoFilter", "Mwahahaha", "Puny Human", "Ya basic"
+		"Crap", "#iCantEven", "#NoFilter", "Mwahahaha", "Puny Human", "Ya basic", "Yuck!", 
+		"Wow, really?", "You even trying?", "Sheesh..", "lol", ":facepalm:"
 	],
 
 	init: function() {
-
 		this.insultText = this.createInsultText();
 		this.scoreText = this.createScoreText();
 
@@ -16,7 +16,6 @@ var EndGameScreen = {
 
 		// should be hidden by default
 		this.hide();
-
 	},
 
 	show: function() {
@@ -24,7 +23,7 @@ var EndGameScreen = {
 		this.insultText.visible = true;
 		this.scoreText.visible = true;
 
-		this.scoreText.text = score.toString();
+		this.scoreText.text = this.getScore().toString();
 		this.scoreText.pivot.x = this.scoreText.width / 2;
 		this.scoreText.pivot.y = this.scoreText.height / 2;
 	},
@@ -32,6 +31,10 @@ var EndGameScreen = {
 	hide: function() {
 		this.insultText.visible = false;
 		this.scoreText.visible = false;
+	},
+
+	getScore: function() {
+		return ScoreKeeper.totalScore;
 	},
 
 	getRandomTextRotation: function() {

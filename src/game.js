@@ -9,7 +9,6 @@ let baseColor;
 
 let gameState = STATE_GAME;
 let gamePaused = false;
-let score = 0;
 
 function setup() {
 	baseColor = Util.generateColor();
@@ -65,6 +64,7 @@ function updateGame(delta) {
 	player.update(delta);
 
 	LeaveBehindText.update(delta);
+	ScoreKeeper.update(delta);
 	
 	PowerUps.checkForCollisions(player, squareSpawner);
 	PowerUpManager.checkForCollisions(player);
