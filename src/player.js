@@ -112,7 +112,7 @@ Player.prototype.handleInput = function(delta) {
 	}
 
 	// TODO pointer index?
-	if (Input.isPointerDown(0)) {
+	if (Input.isPointerDown(0) || Input.isKeyDown(this.SHOOT_KEY)) {
 		this.shoot();
 	}
 }
