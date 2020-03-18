@@ -1,25 +1,37 @@
-var Fonts = {
+const Fonts = {
 
 	EndGameScreen: {
-		font: 'bold 52px Arial'
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fontSize: '52px',
+		fill: '#FFFFFF'
 	},
 
 	LeaveBehindText: {
-		font: 'bold 52px Arial'
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fontSize: '52px',
+		fill: '#FFFFFF'
 	},
 
 	Loading: {
-		font: 'bold 52px Arial',
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fontSize: '48px',
 		fill: '#FFFFFF'
 	},
 
 	PauseText: {
-		font: 'bold 52px Arial',
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fontSize: '52px',
 		fill: '#FFFFFF'
 	},
 
 	Score: {
-		font: 'bold 48px Arial',
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fontSize: '48px',
 		fill: '#FFFFFF'
 	}
 
