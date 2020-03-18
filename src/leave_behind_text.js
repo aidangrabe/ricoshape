@@ -1,4 +1,4 @@
-var LeaveBehindText = {
+const LeaveBehindText = {
 
 	ROTATION: Math.PI / 8,
 	
@@ -6,7 +6,7 @@ var LeaveBehindText = {
 	textPool: [],
 
 	createAt: function(x, y, color, text) {
-		var newText = this.newText(text);
+		const newText = this.newText(text);
 
 		newText.x = x;
 		newText.y = y;
@@ -21,19 +21,21 @@ var LeaveBehindText = {
 	},
 
 	newText: function(displayText) {
-		var text = this.textPool.pop();
-		if (text === undefined) {
+		let text = this.textPool.pop();
+
+		if (typeof text === 'undefined') {
 			text = new PIXI.Text(displayText);
 			particleLayer.addChild(text);
 			this.texts.push(text);
 		}
+
 		return text;
 	},
 
 	update: function(delta) {
-		var dec = 0.1 / delta;
+		const dec = delta / 150;
 
-		for (text of this.texts) {
+		for (let text of this.texts) {
 			if (text.visible) {
 				if (text.alpha < 0) {
 					text.visible = false;
