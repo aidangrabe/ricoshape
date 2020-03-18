@@ -12,12 +12,13 @@ function SquareSpawner() {
 
 SquareSpawner.prototype.update = function(delta) {
 
-	for (var square of this.squares) {
+	for (let square of this.squares) {
 		if (!square.sprite.visible) {
 			continue;
 		}
 
 		square.update(delta);
+
 		if (square.isOffScreen(200)) {
 			this.killSquare(square);
 		}
@@ -31,8 +32,8 @@ SquareSpawner.prototype.update = function(delta) {
 }
 
 SquareSpawner.prototype.spawn = function() {
+	let square;
 
-	var square;
 	// resurrect square if possible
 	if (this.deadSquares.length > 0) {
 		square = this.deadSquares.pop();
@@ -61,8 +62,7 @@ SquareSpawner.prototype.explodeSquare = function(square) {
 }
 
 SquareSpawner.prototype.checkForCollisions = function(player) {
-
-	for (square of this.squares) {
+	for (let square of this.squares) {
 		if (!square.sprite.visible) {
 			continue;
 		}
@@ -78,15 +78,14 @@ SquareSpawner.prototype.checkForCollisions = function(player) {
 	}
 	
 	this.checkForBulletCollisions(player.bullets, player.killBullet.bind(player));
-
 }
 
 SquareSpawner.prototype.checkForBulletCollisions = function(bullets, killBullet) {
-	for (square of this.squares) {
+	for (let square of this.squares) {
 		if (!square.sprite.visible) {
 			continue;
 		}
-		for (bullet of bullets) {
+		for (let bullet of bullets) {
 			if (!bullet.sprite.visible) {
 				continue;
 			}

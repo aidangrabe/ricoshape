@@ -18,11 +18,9 @@ function Square() {
 	};
 
 	this.reset();
-
 }
 
 Square.prototype.reset = function() {
-
 	this.sprite.visible = true;
 	this.moveToStartingPoint();
 
@@ -56,7 +54,7 @@ Square.prototype.reset = function() {
 }
 
 Square.prototype.createSquareGraphic = function(color, width, height) {
-	var square = new PIXI.Graphics();
+	const square = new PIXI.Graphics();
 	square.beginFill(color);
 	square.drawRect(0, 0, width, height);
 	square.endFill();
@@ -79,7 +77,7 @@ Square.prototype.update = function(delta) {
 
 Square.prototype.moveToStartingPoint = function() {
 	// get a random value between 0-3
-	var random = ~~(Math.random() * 4);
+	const random = ~~(Math.random() * 4);
 
 	switch (random) {
 		// top
@@ -106,10 +104,10 @@ Square.prototype.moveToStartingPoint = function() {
 }
 
 Square.prototype.createRandomTargetPoint = function() {
-	var centerX = canvas.width / 2;
-	var centerY = canvas.height / 2;
-	var zoneX = Math.random() * this.TARGET_ZONE_WIDTH;
-	var zoneY = Math.random() * this.TARGET_ZONE_HEIGHT;
+	const centerX = canvas.width / 2;
+	const centerY = canvas.height / 2;
+	const zoneX = Math.random() * this.TARGET_ZONE_WIDTH;
+	const zoneY = Math.random() * this.TARGET_ZONE_HEIGHT;
 	return {
 		x: centerX + (this.TARGET_ZONE_WIDTH / 2) - zoneX,
 		y: centerY + (this.TARGET_ZONE_HEIGHT / 2) - zoneY
