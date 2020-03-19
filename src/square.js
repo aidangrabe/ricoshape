@@ -149,6 +149,6 @@ Square.prototype.hitByBullet = function(bullet) {
 }
 
 Square.prototype.calculateScore = function() {
-	this.score = (this.MAX_SIZE + this.MIN_SIZE - this.size) * this.speed * 100;
+	this.score = (this.MAX_SIZE + this.MIN_SIZE - this.size) * this.speed;
 	this.score = ~~this.score;
 }
