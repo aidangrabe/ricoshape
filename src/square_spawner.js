@@ -48,6 +48,12 @@ SquareSpawner.prototype.spawn = function() {
 }
 
 SquareSpawner.prototype.killSquare = function(square) {
+	if (!square.sprite.visible) {
+		// square is already dead, this can happen if two bullets collide at the
+		// same time with the same square
+		return;
+	}
+
 	square.sprite.visible = false;
 	square.shadow.visible = false;
 	this.deadSquares.push(square);
