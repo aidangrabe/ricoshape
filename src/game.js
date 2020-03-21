@@ -70,4 +70,21 @@ function updateGame(delta) {
 	PowerUpManager.checkForCollisions(player);
 	squareSpawner.checkForCollisions(player);
 
+	if (EndGameScreen.container.visible) {
+		EndGameScreen.update(delta);
+	}
+
+}
+
+function onKeyPressed(key) {
+	EndGameScreen.onKeyPressed(key);
+}
+
+function reset() {
+	stage.removeChildren();
+	hudLayer.removeChildren();
+	shadowLayer.removeChildren();
+	ScoreKeeper.reset();
+
+	setup();
 }

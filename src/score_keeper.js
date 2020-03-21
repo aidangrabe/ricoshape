@@ -38,6 +38,11 @@ const ScoreKeeper = {
 
     resetComboTimer: function () {
         this.comboTimer = TIME_FOR_EACH_COMBO;
+    },
+
+    reset: function () {
+        this.resetComboTimer();
+        this.totalScore = 0;
     }
 
 }

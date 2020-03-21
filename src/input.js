@@ -7,6 +7,8 @@ const Keyboard = {
 		}
 
 		Keyboard.keyStates[event.keyCode] = true;
+
+		onKeyPressed(event.keyCode);
 	},
 
 	onKeyUp: function (event) {
@@ -16,6 +18,7 @@ const Keyboard = {
 };
 
 const Keys = {
+	ENTER: 13,
 	SPACE: 32,
 	LEFT: 37,
 	UP: 38,
