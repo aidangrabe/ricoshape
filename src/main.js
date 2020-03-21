@@ -8,57 +8,39 @@ const renderer = PIXI.autoDetectRenderer({
 	antialias: true
 });
 
-const rootContainer = new PIXI.Container();
-
-// layers
-const shadowLayer = new PIXI.Container();
-const particleLayer = new PIXI.Container();
-const powerUpAnimationLayer = new PIXI.Container();
-const hudLayer = new PIXI.Container();
-
-const stage = new PIXI.Container();
-
 const Constants = {
 	SCREEN_UNIT: canvas.width / 20
 };
 
-rootContainer.addChild(powerUpAnimationLayer);
-rootContainer.addChild(shadowLayer);
-rootContainer.addChild(particleLayer);
-rootContainer.addChild(stage);
-rootContainer.addChild(hudLayer);
-
 class Main {
 
 	constructor() {
+		this.stage = new PIXI.Container();
+
 		this.gameSpeedMultiplier = 1;
+		this.currentScreen = new Screen();
 
 		this.ticker = new PIXI.Ticker();
 		this.ticker.stop();
 	}
 
-	load() {
-		LoadingScreen.init();
+	setCurrentScreen(screen) {
+		screen.engine = this;
+		screen.stage = new PIXI.Container();
+		screen.init();
+		this.stage.addChild(screen.stage);
 
-		Sound.finishedLoading = (_) => { this.onLoadComplete() };
-		Sound.load();
+		this.currentScreen.exit();
+		this.stage.removeChild(this.currentScreen.stage);
+		screen.enter();
+
+		this.currentScreen = screen;
 	}
 
-	onLoadComplete() {
-		LoadingScreen.remove();
-
-		// global function in game.js
-		setup();
-
-		this.startGameLoop();
-	}
-
-	startGameLoop() {
+	start() {
 		this.ticker.add((delta) => {
-			// global function in game.js
-			// 16 so we can maintain the backwards compatibility with old Framework
-			gameLogic(delta * this.gameSpeedMultiplier);
-			renderer.render(rootContainer);
+			this.currentScreen.update(delta * this.gameSpeedMultiplier);
+			renderer.render(this.stage);
 		});
 
 		this.ticker.start();
@@ -69,4 +51,12 @@ class Main {
 Input.init(renderer);
 
 const main = new Main();
-main.load();
+main.start();
+
+const loadingScreen = new LoadingScreen({
+	onLoadComplete: function () {
+		main.setCurrentScreen(new GameScreen());
+	}
+});
+
+main.setCurrentScreen(loadingScreen);

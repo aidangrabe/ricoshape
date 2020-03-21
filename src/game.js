@@ -10,81 +10,94 @@ let baseColor;
 let gameState = STATE_GAME;
 let gamePaused = false;
 
-function setup() {
-	baseColor = Util.generateColor();
+class GameScreen extends Screen {
 
-	renderer.backgroundColor = baseColor;
+	init() {
+		// layers
+		this.shadowLayer = new PIXI.Container();
+		this.particleLayer = new PIXI.Container();
+		this.powerUpAnimationLayer = new PIXI.Container();
+		this.hudLayer = new PIXI.Container();
 
-	player = new Player();
-	player.addToStage(stage, shadowLayer);
-	player.onHitBySquare = function() {
-		gameState = STATE_GAME_OVER;
-		EndGameScreen.show();
-		player.kill();
-		PowerUps.killAll();
-	};
+		this.stage.addChild(this.shadowLayer);
+		this.stage.addChild(this.particleLayer);
+		this.stage.addChild(this.powerUpAnimationLayer);
+		this.stage.addChild(this.hudLayer);
 
-	squareSpawner = new SquareSpawner();
+		this.powerUpManager = new PowerUpManager(this.stage, this.shadowLayer);
+		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
+		this.scoreKeeper = new ScoreKeeper();
 
-	PowerUps.init();
-	HUD.init();
-	PauseScreen.init();
-	EndGameScreen.init();
+		baseColor = Util.generateColor();
 
-}
+		renderer.backgroundColor = baseColor;
 
-function gameLogic(delta) {
+		player = new Player(this.stage, this.shadowLayer, this.particleManager);
+		player.addToStage(this.stage, this.shadowLayer);
+		player.onHitBySquare = () => {
+			gameState = STATE_GAME_OVER;
+			this.endGameScreen.show();
+			player.kill();
+			PowerUps.killAll();
+		};
 
-	if (Input.isKeyPressed(Keys.P)) {
-		gamePaused = !gamePaused;
-		PauseScreen.setPauseMode(gamePaused);
+		squareSpawner = new SquareSpawner(
+			this.stage,
+			this.shadowLayer,
+			this.powerUpManager,
+			this.particleManager,
+			this.scoreKeeper
+		);
+
+		PowerUps.init(this.stage, this.shadowLayer);
+		HUD.init(this.hudLayer);
+		PauseScreen.init(this.stage);
+		this.endGameScreen = new EndGameScreen(this.stage, this.scoreKeeper);
+		this.endGameScreen.init();
+		LeaveBehindText.init(this.particleLayer);
 	}
 
-	if (Input.isKeyPressed(Keys.F)) {
-		Util.setFullscreen(true);
+	update(delta) {
+		if (Input.isKeyPressed(Keys.P)) {
+			gamePaused = !gamePaused;
+			PauseScreen.setPauseMode(gamePaused);
+		}
+
+		if (Input.isKeyPressed(Keys.F)) {
+			Util.setFullscreen(true);
+		}
+
+		if (!gamePaused) {
+			this.updateGame(delta);
+		}
+
+		HUD.update(delta);
 	}
 
-	if (!gamePaused) {
-		updateGame(delta);
+	updateGame(delta) {
+		this.particleManager.update(delta);
+
+		squareSpawner.update(delta);
+
+		PowerUps.update(delta);
+		this.powerUpManager.update(delta);
+
+		player.update(delta);
+
+		LeaveBehindText.update(delta);
+		this.scoreKeeper.update(delta);
+
+		PowerUps.checkForCollisions(player, squareSpawner);
+		this.powerUpManager.checkForCollisions(player);
+		squareSpawner.checkForCollisions(player);
+
+		if (this.endGameScreen.container.visible) {
+			this.endGameScreen.update(delta);
+		}
 	}
 
-	HUD.update(delta);
-	
-}
-
-function updateGame(delta) {
-
-	ParticleManager.update(delta);
-
-	squareSpawner.update(delta);
-
-	PowerUps.update(delta);
-	PowerUpManager.update(delta);
-
-	player.update(delta);
-
-	LeaveBehindText.update(delta);
-	ScoreKeeper.update(delta);
-	
-	PowerUps.checkForCollisions(player, squareSpawner);
-	PowerUpManager.checkForCollisions(player);
-	squareSpawner.checkForCollisions(player);
-
-	if (EndGameScreen.container.visible) {
-		EndGameScreen.update(delta);
+	onKeyPressed(key) {
+		//EndGameScreen.onKeyPressed(key);
 	}
 
-}
-
-function onKeyPressed(key) {
-	EndGameScreen.onKeyPressed(key);
-}
-
-function reset() {
-	stage.removeChildren();
-	hudLayer.removeChildren();
-	shadowLayer.removeChildren();
-	ScoreKeeper.reset();
-
-	setup();
 }

@@ -1,36 +1,40 @@
+class ParticleManager {
 
-var ParticleManager = {
+	constructor(particleLayer, shadowLayer) {
+		this.particleLayer = particleLayer;
+		this.shadowLayer = shadowLayer;
 
-	particles: [],
-	deadParticles: [],
-	
-	burstAt: function(x, y, color, amount) {
-		for (i = 0; i < amount; i++) {
-			var particle = this.newParticle();
+		this.particles = [];
+		this.deadParticles = [];
+	}
+
+	burstAt(x, y, color, amount) {
+		for (let i = 0; i < amount; i++) {
+			const particle = this.newParticle();
 			particle.sprite.x = x;
 			particle.sprite.y = y;
 			particle.sprite.tint = color;
 		}
-	},
+	}
 
-	burstInDirectionAt: function(x, y, color, direction, wiggle, amount) {
-		for (i = 0; i < amount; i++) {
-			var particle = this.newParticle();
+	burstInDirectionAt(x, y, color, direction, wiggle, amount) {
+		for (let i = 0; i < amount; i++) {
+			const particle = this.newParticle();
 			particle.sprite.x = x;
 			particle.sprite.y = y;
 			particle.sprite.tint = color;
 			particle.direction = direction - wiggle + Math.random() * wiggle * 2;
 		}
-	},
+	}
 
-	newParticle: function() {
-		var particle = this.deadParticles.pop();
+	newParticle() {
+		let particle = this.deadParticles.pop();
 		if (particle === undefined) {
 			// create new particle
 			particle = new Particle();
 			this.particles.push(particle);
-			particleLayer.addChild(particle.sprite);
-			shadowLayer.addChild(particle.shadow);
+			this.particleLayer.addChild(particle.sprite);
+			this.shadowLayer.addChild(particle.shadow);
 		}
 		particle.alive = true;
 		particle.life = 40;
@@ -38,10 +42,10 @@ var ParticleManager = {
 		particle.direction = Math.random() * Math.PI * 2;
 		particle.speed = Util.randomBetween(particle.minSpeed, particle.maxSpeed);
 		return particle;
-	},
+	}
 
-	update: function(delta) {
-		for (particle of this.particles) {
+	update(delta) {
+		for (let particle of this.particles) {
 
 			if (particle.alive) {
 
@@ -51,7 +55,7 @@ var ParticleManager = {
 					particle.alive = false;
 					this.deadParticles.push(particle);
 				} else {
-					var scale = 1 * (particle.life / particle.startLife);
+					const scale = 1 * (particle.life / particle.startLife);
 					particle.sprite.scale.x = scale;
 					particle.sprite.scale.y = scale;
 					particle.sprite.x += Math.sin(particle.direction) * particle.speed * delta;
@@ -66,7 +70,6 @@ var ParticleManager = {
 
 			particle.sprite.visible = particle.alive;
 			particle.shadow.visible = particle.alive;
-
 		}
 	}
 

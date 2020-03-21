@@ -1,4 +1,7 @@
-function Square() {
+function Square(stage, scoreKeeper) {
+	this.stage = stage;
+	this.scoreKeeper = scoreKeeper;
+
 	this.MAX_SPEED = 5;
 	this.MIN_SPEED = 2;
 	this.MAX_SIZE  = 2.5;
@@ -140,9 +143,9 @@ Square.prototype.isOffScreen = function(margin) {
 }
 
 Square.prototype.hitByBullet = function(bullet) {
-	const scoreEarned = ScoreKeeper.squareKill(this);
+	const scoreEarned = this.scoreKeeper.squareKill(this);
 
-	Quake.shake(10, 10);
+	Quake.shake(this.stage, 10, 10);
 	Sound.play('square.hit');
 
 	LeaveBehindText.createAt(this.sprite.x, this.sprite.y, this.sprite.tint, scoreEarned);

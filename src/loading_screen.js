@@ -1,23 +1,32 @@
-var LoadingScreen = {
-	
-	init: function() {
-		this.screen = new PIXI.Container();
+class LoadingScreen extends Screen {
 
+	constructor(callbacks) {
+		super();
+		this.callbacks = callbacks;
+	}
+
+	init() {
 		renderer.backgroundColor = Util.generateColor();
 
-		var loadingText = new PIXI.Text("Loading...");
+		const loadingText = new PIXI.Text("Loading...");
 		loadingText.style = Fonts.Loading;
 		loadingText.x = canvas.width / 2 - loadingText.width / 2;
 		loadingText.y = canvas.height / 2 - loadingText.height / 2;
 
-		this.screen.addChild(loadingText);
+		this.stage.addChild(loadingText);
+	}
 
-		stage.addChild(this.screen);
-		renderer.render(rootContainer);
-	},
+	enter() {
+		this.load();
+	}
 
-	remove: function() {
-		stage.removeChild(this.screen);
+	load() {
+		Sound.finishedLoading = (_) => { this.onLoadComplete() };
+		Sound.load();
+	}
+
+	onLoadComplete() {
+		this.callbacks.onLoadComplete();
 	}
 
 }

@@ -5,6 +5,10 @@ const LeaveBehindText = {
 	texts: [],
 	textPool: [],
 
+	init: function(particleLayer) {
+		this.particleLayer = particleLayer;
+	},
+
 	createAt: function(x, y, color, text) {
 		const newText = this.newText(text);
 
@@ -25,7 +29,7 @@ const LeaveBehindText = {
 
 		if (typeof text === 'undefined') {
 			text = new PIXI.Text(displayText);
-			particleLayer.addChild(text);
+			this.particleLayer.addChild(text);
 			this.texts.push(text);
 		}
 

@@ -7,8 +7,10 @@ const PowerUps = {
 	tripleShooterTimer: 0,
 	rapidFireTimer: 0,
 
-	init: function() {
+	init: function(stage, shadowLayer) {
 		this.powerups.push(Shield);
+		this.stage = stage;
+		this.shadowLayer = shadowLayer;
 	},
 
 	update: function(delta) {
@@ -40,8 +42,8 @@ const PowerUps = {
 	],
 
 	enableRandomPowerUp: function() {
-		var powerUpFunction = Util.pickRandom(this.powerUpFunctions);
-		powerUpFunction();
+		const powerUpFunction = Util.pickRandom(this.powerUpFunctions);
+		powerUpFunction(this.stage, this.shadowLayer);
 	},
 
 	checkForCollisions: function(player, squareSpawner) {
@@ -58,7 +60,7 @@ const PowerUps = {
 
 }
 
-var Shield = {
+const Shield = {
 
 	active: false,
 	numBulletsInShield: 6,
@@ -68,12 +70,13 @@ var Shield = {
 	// radians
 	angle: 0,
 
-	reset: function() {
+	reset: function(stage, shadowLayer) {
 		this.kill();
 		this.bullets = [];
+		this.shadowLayer = shadowLayer;
 
 		for (let i = 0; i < this.numBulletsInShield; i++) {
-			const bullet = this.createBullet();
+			const bullet = this.createBullet(stage, shadowLayer);
 			bullet.sprite.tint = player.color;
 			this.bullets.push(bullet);
 		}
@@ -94,10 +97,10 @@ var Shield = {
 		}
 	},
 
-	createBullet: function() {
+	createBullet: function(stage, shadowLayer) {
 		let bullet = this.bulletPool.pop();
 		if (bullet === undefined) {
-			bullet = new Bullet();
+			bullet = new Bullet(shadowLayer);
 			this.bullets.push();
 			stage.addChild(bullet.sprite);
 		}
@@ -142,9 +145,9 @@ function explodePowerUp() {
 
 }
 
-function enableShield() {
+function enableShield(stage, shadowLayer) {
 	Shield.active = true;
-	Shield.reset();
+	Shield.reset(stage, shadowLayer);
 }
 
 function tripleShooter() {

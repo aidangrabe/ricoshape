@@ -2,7 +2,7 @@ const COMBO_TILT_THRESHOLD = Math.PI / 32;
 
 const HUD = {
 
-	init: function () {
+	init: function (stage) {
 		this.layer = new PIXI.Container();
 
 		this.scoreText = new PIXI.Text("0");
@@ -16,7 +16,7 @@ const HUD = {
 		this.layer.addChild(this.comboText);
 		this.layer.addChild(this.scoreText);
 
-		hudLayer.addChild(this.layer);
+		stage.addChild(this.layer);
 	},
 
 	createComboText: function () {

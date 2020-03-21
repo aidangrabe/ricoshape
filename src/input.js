@@ -8,7 +8,7 @@ const Keyboard = {
 
 		Keyboard.keyStates[event.keyCode] = true;
 
-		onKeyPressed(event.keyCode);
+		// onKeyPressed(event.keyCode); TODO
 	},
 
 	onKeyUp: function (event) {

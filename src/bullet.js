@@ -1,8 +1,10 @@
-function Bullet() {
+function Bullet(shadowLayer) {
+	this.shadowLayer = shadowLayer;
+
 	this.sprite = this.createBulletGraphic(0xFFFFFF, 8);
 	this.shadow = this.createBulletGraphic(0x000000, 8);
 
-	shadowLayer.addChild(this.shadow);	
+	this.shadowLayer.addChild(this.shadow);	
 
 	this.shadow.width = this.sprite.width + 2;
 	this.shadow.height = this.sprite.height + 2;

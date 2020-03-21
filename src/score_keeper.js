@@ -1,12 +1,14 @@
 const TIME_FOR_EACH_COMBO = 1 * 60; // seconds
 
-const ScoreKeeper = {
+class ScoreKeeper {
 
-    totalScore: 0,
-    comboMultiplier: 1,
-    comboTimer: TIME_FOR_EACH_COMBO,
+    constructor() {
+        this.totalScore = 0;
+        this.comboMultiplier = 1;
+        this.comboTimer = TIME_FOR_EACH_COMBO;
+    }
 
-    update: function (delta) {
+    update(delta) {
         if (this.comboMultiplier > 1) {
             this.comboTimer -= delta;
 
@@ -18,13 +20,13 @@ const ScoreKeeper = {
         } else {
             this.resetComboTimer();
         }
-    },
+    }
 
-    squareKill: function (square) {
+    squareKill(square) {
         return this.addKill(square.score);
-    },
+    }
 
-    addKill: function (score) {
+    addKill(score) {
         const scoreToAdd = score * this.comboMultiplier;
 
         this.totalScore += scoreToAdd;
@@ -34,13 +36,13 @@ const ScoreKeeper = {
         this.comboMultiplier++;
 
         return scoreToAdd;
-    },
+    }
 
-    resetComboTimer: function () {
+    resetComboTimer() {
         this.comboTimer = TIME_FOR_EACH_COMBO;
-    },
+    }
 
-    reset: function () {
+    reset() {
         this.resetComboTimer();
         this.totalScore = 0;
     }

@@ -1,20 +1,20 @@
-var Quake = {
+const Quake = {
 	
-	shake: function(magnitude, times) {
-		var timeBetweenShakes = 25; // in milliseconds
-		var halfMagnitude = magnitude / 2;
+	shake: function(stage, magnitude, times) {
+		const timeBetweenShakes = 25; // in milliseconds
+		const halfMagnitude = magnitude / 2;
 
 	    var func = function() {
-	        rootContainer.position.x = Util.randomBetween(-halfMagnitude, halfMagnitude);
-	        rootContainer.position.y = Util.randomBetween(-halfMagnitude, halfMagnitude);
+	        stage.position.x = Util.randomBetween(-halfMagnitude, halfMagnitude);
+	        stage.position.y = Util.randomBetween(-halfMagnitude, halfMagnitude);
 
 	        times--;
 
 	        if (times > 0) {
 	             setTimeout(func, timeBetweenShakes);
 	        } else {
-	             rootContainer.x = 0;
-	             rootContainer.y = 0;
+	             stage.x = 0;
+	             stage.y = 0;
 	        }
 
 	    };

@@ -1,4 +1,10 @@
-function SquareSpawner() {
+function SquareSpawner(stage, shadowLayer, powerUpManager, particleManager, scoreKeeper) {
+	this.stage = stage;
+	this.shadowLayer = shadowLayer;
+	this.powerUpManager = powerUpManager;
+	this.particleManager = particleManager;
+	this.scoreKeeper = scoreKeeper;
+
 	this.ONE_IN_X_CHANCE_TO_DROP_POWERUP = 10;
 	
 	this.squares = [];
@@ -11,7 +17,6 @@ function SquareSpawner() {
 }
 
 SquareSpawner.prototype.update = function(delta) {
-
 	for (let square of this.squares) {
 		if (!square.sprite.visible) {
 			continue;
@@ -24,11 +29,10 @@ SquareSpawner.prototype.update = function(delta) {
 		}
 	}
 
-	var diceRoll = ~~(Math.random() * (60 * delta));
+	const diceRoll = ~~(Math.random() * (60 * delta));
 	if (diceRoll == 1) {
 		this.spawn();
 	}
-
 }
 
 SquareSpawner.prototype.spawn = function() {
@@ -38,9 +42,9 @@ SquareSpawner.prototype.spawn = function() {
 	if (this.deadSquares.length > 0) {
 		square = this.deadSquares.pop();
 	} else {
-		square = new Square();
-		stage.addChild(square.sprite);
-		shadowLayer.addChild(square.shadow);
+		square = new Square(this.stage, this.scoreKeeper);
+		this.stage.addChild(square.sprite);
+		this.shadowLayer.addChild(square.shadow);
 		this.squares.push(square);
 	}
 
@@ -58,13 +62,13 @@ SquareSpawner.prototype.killSquare = function(square) {
 	square.shadow.visible = false;
 	this.deadSquares.push(square);
 	if (Util.oneIn(this.ONE_IN_X_CHANCE_TO_DROP_POWERUP)) {
-		PowerUpManager.createPowerUpAt(square.sprite.x, square.sprite.y);
+		this.powerUpManager.createPowerUpAt(square.sprite.x, square.sprite.y);
 	}
 }
 
 SquareSpawner.prototype.explodeSquare = function(square) {
 	this.killSquare(square);
-	ParticleManager.burstAt(square.sprite.x, square.sprite.y, square.sprite.tint, 30);
+	this.particleManager.burstAt(square.sprite.x, square.sprite.y, square.sprite.tint, 30);
 }
 
 SquareSpawner.prototype.checkForCollisions = function(player) {

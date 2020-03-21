@@ -1,139 +1,152 @@
-var PowerUpManager = {
-	
-	powerUps: [],
-	powerUpPool: [],
-	animations: [],
-	animationPool: [],
+class PowerUpManager {
 
-	update: function(delta) {
-		for (pup of this.powerUps) {
+	constructor(stage, powerUpLayer) {
+		this.stage = stage;
+		this.powerUpAnimationLayer = powerUpLayer;
+
+		this.powerUps = [];
+		this.powerUpPool = [];
+		this.animations = [];
+		this.animationPool = [];
+	}
+
+	update(delta) {
+		for (let pup of this.powerUps) {
 			if (pup.sprite.visible) {
 				pup.update(delta);
 			}
 		}
 
-		for (anim of this.animations) {
+		for (let anim of this.animations) {
 			if (anim.sprite.visible) {
 				anim.update(delta);
 			}
 		}
-	},
+	}
 
-	createPowerUpAt: function(x, y) {
-		var pup = this.createPowerUp();
+	createPowerUpAt(x, y) {
+		const pup = this.createPowerUp();
 		pup.sprite.x = x;
 		pup.sprite.y = y;
 		return pup;
-	},
+	}
 
-	createPowerUp: function() {
-		var pup = this.powerUpPool.pop();
-		if (pup === undefined) {
+	createPowerUp() {
+		let pup = this.powerUpPool.pop();
+		if (typeof pup === 'undefined') {
 			pup = new PowerUp();
 			this.powerUps.push(pup);
-			stage.addChild(pup.sprite);
+			this.stage.addChild(pup.sprite);
 		}
 		pup.sprite.visible = true;
 		return pup;
-	},
+	}
 
-	createAnimation: function() {
-		var anim = this.animationPool.pop();
-		if (anim === undefined) {
-			anim = new PowerUpAnimation();
+	createAnimation() {
+		let anim = this.animationPool.pop();
+		if (typeof anim === 'undefined') {
+			anim = new PowerUpAnimation(this);
 			this.animations.push(anim);
-			powerUpAnimationLayer.addChild(anim.sprite);
+			this.powerUpAnimationLayer.addChild(anim.sprite);
 		}
 		anim.sprite.visible = true;
 		anim.sprite.scale.x = 1;
 		anim.sprite.scale.y = 1;
 		return anim;
-	},
+	}
 
-	checkForCollisions: function(player) {
+	checkForCollisions(player) {
 		if (!player.sprite.visible) {
 			return;
 		}
 
-		for (pup of this.powerUps) {
+		for (let pup of this.powerUps) {
 			if (pup.sprite.visible) {
 				if (Util.spriteCollidesWithSprite(pup.sprite, player.sprite)) {
 					this.powerUpHitByPlayer(pup);
 				}
 			}
 		}
-	},
+	}
 
-	powerUpHitByPlayer: function(pup) {
+	powerUpHitByPlayer(pup) {
 		Sound.play('powerup');
 		this.killPowerUp(pup);
 
 		this.createRandomPowerUp();
 
-		var anim = this.createAnimation();
+		const anim = this.createAnimation();
 		anim.sprite.x = pup.sprite.x;
 		anim.sprite.y = pup.sprite.y;
-	},
+	}
 
-	killAnimation: function(anim) {
+	killAnimation(anim) {
 		anim.sprite.visible = false;
 		this.animationPool.push(anim);
-	},
+	}
 
-	killPowerUp: function(pup) {
+	killPowerUp(pup) {
 		pup.sprite.visible = false;
 		this.powerUpPool.push(pup);
-	},
+	}
 
-	createRandomPowerUp: function() {
+	createRandomPowerUp() {
 		PowerUps.enableRandomPowerUp();
 	}
 
 }
 
-var PowerUp = function() {
-	this.sprite = PowerUp.createGraphic();
-	this.rotationSpeed = 4;
-	this.scaleDelta = 0;
-	this.sprite.tint = Util.generateColorFrom(baseColor);
-}
+class PowerUp {
 
-PowerUp.prototype.update = function(delta) {
-	this.scaleDelta += (delta / 8) % Math.PI;
-
-	var scale = 0.75 + Util.lengthDirX(0.25, this.scaleDelta);
-	this.sprite.scale.x = scale;
-	this.sprite.scale.y = scale;
-
-}
-
-PowerUp.createGraphic = function() {
-	var radius = 12;
-
-	var g = new PIXI.Graphics();
-	g.beginFill(0xFFFFFF);
-	g.drawCircle(radius, radius, radius);
-	g.endFill();
-
-	g.pivot.x = radius;
-	g.pivot.y = radius;
-
-	return g;
-}
-
-PowerUpAnimation = function() {
-	this.sprite = PowerUp.createGraphic();
-	this.sprite.tint = Util.generateColorFrom(baseColor);
-}
-
-PowerUpAnimation.prototype.update = function(delta) {
-	var scale = (this.sprite.scale.x * delta / 16);
-	this.sprite.scale.x += scale;
-	this.sprite.scale.y += scale;
-	this.sprite.alpha -= 1 * delta / 100;
-	if (this.sprite.alpha < 0) {
-		PowerUpManager.killAnimation(this);
+	constructor() {
+		this.sprite = PowerUp.createGraphic();
+		this.rotationSpeed = 4;
+		this.scaleDelta = 0;
+		this.sprite.tint = Util.generateColorFrom(baseColor);
 	}
+
+	update(delta) {
+		this.scaleDelta += (delta / 8) % Math.PI;
+
+		const scale = 0.75 + Util.lengthDirX(0.25, this.scaleDelta);
+		this.sprite.scale.x = scale;
+		this.sprite.scale.y = scale;
+	}
+
+	static createGraphic() {
+		const radius = 12;
+
+		const g = new PIXI.Graphics();
+		g.beginFill(0xFFFFFF);
+		g.drawCircle(radius, radius, radius);
+		g.endFill();
+
+		g.pivot.x = radius;
+		g.pivot.y = radius;
+
+		return g;
+	}
+
+}
+
+class PowerUpAnimation {
+
+	constructor(manager) {
+		this.manager = manager;
+		this.sprite = PowerUp.createGraphic();
+		this.sprite.tint = Util.generateColorFrom(baseColor);
+	}
+
+	update(delta) {
+		const scale = (this.sprite.scale.x * delta / 16);
+		this.sprite.scale.x += scale;
+		this.sprite.scale.y += scale;
+		this.sprite.alpha -= 1 * delta / 100;
+		if (this.sprite.alpha < 0) {
+			this.manager.killAnimation(this);
+		}
+	}
+
 }
 
 
