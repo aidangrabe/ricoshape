@@ -1,9 +1,10 @@
-function SquareSpawner(stage, shadowLayer, powerUpManager, particleManager, scoreKeeper) {
+function SquareSpawner(stage, shadowLayer, powerUpManager, particleManager, scoreKeeper, leaveBehindText) {
 	this.stage = stage;
 	this.shadowLayer = shadowLayer;
 	this.powerUpManager = powerUpManager;
 	this.particleManager = particleManager;
 	this.scoreKeeper = scoreKeeper;
+	this.leaveBehindText = leaveBehindText;
 
 	this.ONE_IN_X_CHANCE_TO_DROP_POWERUP = 10;
 	
@@ -42,7 +43,7 @@ SquareSpawner.prototype.spawn = function() {
 	if (this.deadSquares.length > 0) {
 		square = this.deadSquares.pop();
 	} else {
-		square = new Square(this.stage, this.scoreKeeper);
+		square = new Square(this.stage, this.scoreKeeper, this.leaveBehindText);
 		this.stage.addChild(square.sprite);
 		this.shadowLayer.addChild(square.shadow);
 		this.squares.push(square);

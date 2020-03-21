@@ -1,15 +1,15 @@
-const LeaveBehindText = {
+class LeaveBehindText {
 
-	ROTATION: Math.PI / 8,
-	
-	texts: [],
-	textPool: [],
+	constructor(layer) {
+		this.ROTATION = Math.PI / 8;
 
-	init: function(particleLayer) {
-		this.particleLayer = particleLayer;
-	},
+		this.texts = [];
+		this.textPool = [];
 
-	createAt: function(x, y, color, text) {
+		this.particleLayer = layer;
+	}
+
+	createAt(x, y, color, text) {
 		const newText = this.newText(text);
 
 		newText.x = x;
@@ -22,9 +22,9 @@ const LeaveBehindText = {
 		newText.style = Fonts.LeaveBehindText;
 		newText.style.fill = color;
 		newText.visible = true;
-	},
+	}
 
-	newText: function(displayText) {
+	newText(displayText) {
 		let text = this.textPool.pop();
 
 		if (typeof text === 'undefined') {
@@ -34,9 +34,9 @@ const LeaveBehindText = {
 		}
 
 		return text;
-	},
+	}
 
-	update: function(delta) {
+	update(delta) {
 		const dec = delta / 150;
 
 		for (let text of this.texts) {

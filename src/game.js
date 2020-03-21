@@ -28,6 +28,7 @@ class GameScreen extends Screen {
 		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
 		this.scoreKeeper = new ScoreKeeper();
 		this.hud = new HUD(this.stage, this.scoreKeeper);
+		this.leaveBehindText = new LeaveBehindText(this.particleLayer);
 
 		baseColor = Util.generateColor();
 
@@ -47,14 +48,14 @@ class GameScreen extends Screen {
 			this.shadowLayer,
 			this.powerUpManager,
 			this.particleManager,
-			this.scoreKeeper
+			this.scoreKeeper,
+			this.leaveBehindText
 		);
 
 		PowerUps.init(this.stage, this.shadowLayer);
 		PauseScreen.init(this.stage);
 		this.endGameScreen = new EndGameScreen(this.hudLayer, this.scoreKeeper);
 		this.endGameScreen.init();
-		LeaveBehindText.init(this.particleLayer);
 	}
 
 	update(delta) {
@@ -84,7 +85,7 @@ class GameScreen extends Screen {
 
 		player.update(delta);
 
-		LeaveBehindText.update(delta);
+		this.leaveBehindText.update(delta);
 		this.scoreKeeper.update(delta);
 
 		PowerUps.checkForCollisions(player, squareSpawner);
