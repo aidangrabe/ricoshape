@@ -1,153 +1,125 @@
-class PowerUpPickupManager {
+const TIME_TRIPLE_SHOOT = 240; // 4 seconds
+const TIME_RAPID_FIRE = 360; // 6 seconds
 
-	constructor(stage, powerUpLayer, powerUpManager) {
+class PowerUpManager {
+
+	constructor(stage, player, shadowLayer) {
 		this.stage = stage;
-		this.powerUpAnimationLayer = powerUpLayer;
-		this.powerUpManager = powerUpManager;
+		this.player = player;
+		this.shadowLayer = shadowLayer;
 
-		this.powerUps = [];
-		this.powerUpPool = [];
-		this.animations = [];
-		this.animationPool = [];
+		this.activePowerUps = [];
+		this.availablePowerUps = [
+			() => { this.enableShield(); },
+			// () => { this.enableTripleShoot() },
+			// () => { this.enableRapidFire() },
+			() => { this.enableExplode() }
+		];
+	}
+
+	activateRandomPowerUp() {
+		// pick a random power up function and execute it
+		const powerUpFunction = Util.pickRandom(this.availablePowerUps);
+		powerUpFunction();
 	}
 
 	update(delta) {
-		for (let pup of this.powerUps) {
-			if (pup.sprite.visible) {
-				pup.update(delta);
+		for (let pup of this.activePowerUps) {
+			pup.update(delta);
+		}
+	}
+
+	enableShield() {
+		let reused = false;
+
+		for (let pup of this.activePowerUps) {
+			if (pup instanceof Shield) {
+				pup.reset();
+				reused = true;
+				break;
 			}
 		}
 
-		for (let anim of this.animations) {
-			if (anim.sprite.visible) {
-				anim.update(delta);
-			}
+		if (!reused) {
+			const shield = new Shield(this.stage, this.shadowLayer);
+			this.activePowerUps.push(shield);
 		}
 	}
 
-	createPowerUpAt(x, y) {
-		const pup = this.createPowerUp();
-		pup.sprite.x = x;
-		pup.sprite.y = y;
-		return pup;
-	}
-
-	createPowerUp() {
-		let pup = this.powerUpPool.pop();
-		if (typeof pup === 'undefined') {
-			pup = new PowerUpPickup();
-			this.powerUps.push(pup);
-			this.stage.addChild(pup.sprite);
-		}
-		pup.sprite.visible = true;
-		return pup;
-	}
-
-	createAnimation() {
-		let anim = this.animationPool.pop();
-		if (typeof anim === 'undefined') {
-			anim = new PowerUpAnimation(this);
-			this.animations.push(anim);
-			this.powerUpAnimationLayer.addChild(anim.sprite);
-		}
-		anim.sprite.visible = true;
-		anim.sprite.scale.x = 1;
-		anim.sprite.scale.y = 1;
-		return anim;
-	}
-
-	checkForCollisions(player) {
-		if (!player.sprite.visible) {
-			return;
-		}
-
-		for (let pup of this.powerUps) {
-			if (pup.sprite.visible) {
-				if (Util.spriteCollidesWithSprite(pup.sprite, player.sprite)) {
-					this.powerUpHitByPlayer(pup);
-				}
-			}
+	checkForCollisions(gameScreen) {
+		for (let pup of this.activePowerUps) {
+			pup.checkForCollisions(gameScreen);
 		}
 	}
 
-	powerUpHitByPlayer(pup) {
-		Sound.play('powerup');
-		this.killPowerUp(pup);
+	killAll() {
+		for (let pup of this.activePowerUps) {
+			pup.kill();
+		}
 
-		this.createRandomPowerUp();
-
-		const anim = this.createAnimation();
-		anim.sprite.x = pup.sprite.x;
-		anim.sprite.y = pup.sprite.y;
+		this.activePowerUps = [];
 	}
 
-	killAnimation(anim) {
-		anim.sprite.visible = false;
-		this.animationPool.push(anim);
+	enableTripleShoot() {
+		// TODO
 	}
 
-	killPowerUp(pup) {
-		pup.sprite.visible = false;
-		this.powerUpPool.push(pup);
+	enableRapidFire() {
+		// TODO
 	}
 
-	createRandomPowerUp() {
-		this.powerUpManager.activateRandomPowerUp();
-	}
+	enableExplode() {
+		const player = this.player;
+		const numberOfBullets = 12;
+		const circle = Math.PI * 2;
+		const angleDelta = circle / numberOfBullets;
 
-}
-
-class PowerUpPickup {
-
-	constructor() {
-		this.sprite = PowerUpPickup.createGraphic();
-		this.rotationSpeed = 4;
-		this.scaleDelta = 0;
-		this.sprite.tint = Util.generateColorFrom(baseColor);
-	}
-
-	update(delta) {
-		this.scaleDelta += (delta / 8) % Math.PI;
-
-		const scale = 0.75 + Util.lengthDirX(0.25, this.scaleDelta);
-		this.sprite.scale.x = scale;
-		this.sprite.scale.y = scale;
-	}
-
-	static createGraphic() {
-		const radius = 12;
-
-		const g = new PIXI.Graphics();
-		g.beginFill(0xFFFFFF);
-		g.drawCircle(radius, radius, radius);
-		g.endFill();
-
-		g.pivot.x = radius;
-		g.pivot.y = radius;
-
-		return g;
-	}
-
-}
-
-class PowerUpAnimation {
-
-	constructor(manager) {
-		this.manager = manager;
-		this.sprite = PowerUpPickup.createGraphic();
-		this.sprite.tint = Util.generateColorFrom(baseColor);
-	}
-
-	update(delta) {
-		const scale = (this.sprite.scale.x * delta / 16);
-		this.sprite.scale.x += scale;
-		this.sprite.scale.y += scale;
-		this.sprite.alpha -= 1 * delta / 100;
-		if (this.sprite.alpha < 0) {
-			this.manager.killAnimation(this);
+		for (let i = 0; i < numberOfBullets; i++) {
+			const bullet = player.createBullet();
+			bullet.sprite.x = player.sprite.x;
+			bullet.sprite.y = player.sprite.y;
+			bullet.setSpeedAndDirection(player.bulletSpeed, angleDelta * i);
+			bullet.sprite.tint = player.color;
 		}
 	}
 
 }
 
+// TODO re-add triple-shoot and rapid fire - Need to create a Timer class as well
+// const PowerUps = {
 
+// 	powerups: [],
+// 	tripleShooterTimer: 0,
+// 	rapidFireTimer: 0,
+
+// 	update: function (delta) {
+// 		if (this.tripleShooterTimer > 0) {
+// 			this.tripleShooterTimer -= 1 * delta;
+// 		} else {
+// 			player.removeGun(Guns.TripleShooter);
+// 		}
+
+// 		if (this.rapidFireTimer > 0) {
+// 			this.rapidFireTimer -= 1 * delta;
+// 		} else {
+// 			player.shootInterval = player.originalShootInterval;
+// 		}
+
+// 		for (let pup of this.powerups) {
+// 			if (pup.active) {
+// 				pup.update(delta);
+// 			}
+// 		}
+// 	}
+
+// }
+
+// function tripleShooter() {
+// 	PowerUps.tripleShooterTimer = TIME_TRIPLE_SHOOT;
+// 	player.addGun(Guns.TripleShooter);
+// }
+
+// function rapidFire() {
+// 	PowerUps.rapidFireTimer = TIME_RAPID_FIRE;
+// 	player.shootInterval = player.shootInterval / 3 * 2;
+// }
