@@ -1,161 +1,125 @@
 const TIME_TRIPLE_SHOOT = 240; // 4 seconds
 const TIME_RAPID_FIRE = 360; // 6 seconds
 
-const PowerUps = {
+class PowerUpManager {
 
-	powerups: [],
-	tripleShooterTimer: 0,
-	rapidFireTimer: 0,
-
-	init: function(stage, shadowLayer) {
-		this.powerups.push(Shield);
+	constructor(stage, player, shadowLayer) {
 		this.stage = stage;
+		this.player = player;
 		this.shadowLayer = shadowLayer;
-	},
 
-	update: function(delta) {
+		this.activePowerUps = [];
+		this.availablePowerUps = [
+			() => { this.enableShield(); },
+			// () => { this.enableTripleShoot() },
+			// () => { this.enableRapidFire() },
+			() => { this.enableExplode() }
+		];
+	}
 
-		if (this.tripleShooterTimer > 0) {
-			this.tripleShooterTimer -= 1 * delta;
-		} else {
-			player.removeGun(Guns.TripleShooter);
+	activateRandomPowerUp() {
+		// pick a random power up function and execute it
+		const powerUpFunction = Util.pickRandom(this.availablePowerUps);
+		powerUpFunction();
+	}
+
+	update(delta) {
+		for (let pup of this.activePowerUps) {
+			pup.update(delta);
 		}
+	}
 
-		if (this.rapidFireTimer > 0) {
-			this.rapidFireTimer -= 1 * delta;
-		} else {
-			player.shootInterval = player.originalShootInterval;
-		}
+	enableShield() {
+		let reused = false;
 
-		for (let pup of this.powerups) {
-			if (pup.active) {
-				pup.update(delta);
+		for (let pup of this.activePowerUps) {
+			if (pup instanceof Shield) {
+				pup.reset();
+				reused = true;
+				break;
 			}
 		}
-	},
-	
-	powerUpFunctions: [
-		explodePowerUp,
-		enableShield,
-		tripleShooter,
-		rapidFire
-	],
 
-	enableRandomPowerUp: function() {
-		const powerUpFunction = Util.pickRandom(this.powerUpFunctions);
-		powerUpFunction(this.stage, this.shadowLayer);
-	},
-
-	checkForCollisions: function(player, squareSpawner) {
-		for (let pup of this.powerups) {
-			pup.checkForCollisions(player, squareSpawner);
+		if (!reused) {
+			const shield = new Shield(this.stage, this.shadowLayer);
+			this.activePowerUps.push(shield);
 		}
-	},
+	}
 
-	killAll: function() {
-		for (let pup of this.powerups) {
+	checkForCollisions(gameScreen) {
+		for (let pup of this.activePowerUps) {
+			pup.checkForCollisions(gameScreen);
+		}
+	}
+
+	killAll() {
+		for (let pup of this.activePowerUps) {
 			pup.kill();
-		}	
+		}
+
+		this.activePowerUps = [];
 	}
 
-}
+	enableTripleShoot() {
+		// TODO
+	}
 
-const Shield = {
+	enableRapidFire() {
+		// TODO
+	}
 
-	active: false,
-	numBulletsInShield: 6,
-	bullets: [],
-	bulletPool: [],
+	enableExplode() {
+		const player = this.player;
+		const numberOfBullets = 12;
+		const circle = Math.PI * 2;
+		const angleDelta = circle / numberOfBullets;
 
-	// radians
-	angle: 0,
-
-	reset: function(stage, shadowLayer) {
-		this.kill();
-		this.bullets = [];
-		this.shadowLayer = shadowLayer;
-
-		for (let i = 0; i < this.numBulletsInShield; i++) {
-			const bullet = this.createBullet(stage, shadowLayer);
+		for (let i = 0; i < numberOfBullets; i++) {
+			const bullet = player.createBullet();
+			bullet.sprite.x = player.sprite.x;
+			bullet.sprite.y = player.sprite.y;
+			bullet.setSpeedAndDirection(player.bulletSpeed, angleDelta * i);
 			bullet.sprite.tint = player.color;
-			this.bullets.push(bullet);
-		}
-
-	},
-
-	update: function(delta) {
-		this.angle += 1 * (delta / 16);
-		const angleDelta = Math.PI * 2 / this.numBulletsInShield;
-
-		let i = 0;
-
-		for (let bullet of this.bullets) {
-			bullet.sprite.x = player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
-			bullet.sprite.y = player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
-			bullet.update(delta);
-			i++;
-		}
-	},
-
-	createBullet: function(stage, shadowLayer) {
-		let bullet = this.bulletPool.pop();
-		if (bullet === undefined) {
-			bullet = new Bullet(shadowLayer);
-			this.bullets.push();
-			stage.addChild(bullet.sprite);
-		}
-		bullet.sprite.visible = true;
-		return bullet;
-	},
-
-	checkForCollisions: function(player, squareSpawner) {
-		if (!this.active) {
-			return;
-		}
-		squareSpawner.checkForBulletCollisions(this.bullets, this.killBullet.bind(this));
-	},
-
-	killBullet: function(bullet) {
-		bullet.sprite.visible = false;
-		bullet.sprite.visible = false;
-		this.bulletPool.push(bullet);
-	},
-
-	kill: function() {
-		for (let bullet of this.bullets) {
-			this.killBullet(bullet);
 		}
 	}
 
 }
 
-// shoot a load of bullets out from where the player is
-function explodePowerUp() {
-	const numberOfBullets = 12;
-	const circle = Math.PI * 2;
-	const angleDelta = circle / numberOfBullets;
+// TODO re-add triple-shoot and rapid fire - Need to create a Timer class as well
+// const PowerUps = {
 
-	for (let i = 0; i < numberOfBullets; i++) {
-		const bullet = player.createBullet();
-		bullet.sprite.x = player.sprite.x;
-		bullet.sprite.y = player.sprite.y;
-		bullet.setSpeedAndDirection(player.bulletSpeed, angleDelta * i);
-		bullet.sprite.tint = player.color;
-	}
+// 	powerups: [],
+// 	tripleShooterTimer: 0,
+// 	rapidFireTimer: 0,
 
-}
+// 	update: function (delta) {
+// 		if (this.tripleShooterTimer > 0) {
+// 			this.tripleShooterTimer -= 1 * delta;
+// 		} else {
+// 			player.removeGun(Guns.TripleShooter);
+// 		}
 
-function enableShield(stage, shadowLayer) {
-	Shield.active = true;
-	Shield.reset(stage, shadowLayer);
-}
+// 		if (this.rapidFireTimer > 0) {
+// 			this.rapidFireTimer -= 1 * delta;
+// 		} else {
+// 			player.shootInterval = player.originalShootInterval;
+// 		}
 
-function tripleShooter() {
-	PowerUps.tripleShooterTimer = TIME_TRIPLE_SHOOT;
-	player.addGun(Guns.TripleShooter);
-}
+// 		for (let pup of this.powerups) {
+// 			if (pup.active) {
+// 				pup.update(delta);
+// 			}
+// 		}
+// 	}
 
-function rapidFire() {
-	PowerUps.rapidFireTimer = TIME_RAPID_FIRE;
-	player.shootInterval = player.shootInterval / 3 * 2;
-}
+// }
+
+// function tripleShooter() {
+// 	PowerUps.tripleShooterTimer = TIME_TRIPLE_SHOOT;
+// 	player.addGun(Guns.TripleShooter);
+// }
+
+// function rapidFire() {
+// 	PowerUps.rapidFireTimer = TIME_RAPID_FIRE;
+// 	player.shootInterval = player.shootInterval / 3 * 2;
+// }

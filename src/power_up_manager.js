@@ -1,8 +1,9 @@
-class PowerUpManager {
+class PowerUpPickupManager {
 
-	constructor(stage, powerUpLayer) {
+	constructor(stage, powerUpLayer, powerUpManager) {
 		this.stage = stage;
 		this.powerUpAnimationLayer = powerUpLayer;
+		this.powerUpManager = powerUpManager;
 
 		this.powerUps = [];
 		this.powerUpPool = [];
@@ -34,7 +35,7 @@ class PowerUpManager {
 	createPowerUp() {
 		let pup = this.powerUpPool.pop();
 		if (typeof pup === 'undefined') {
-			pup = new PowerUp();
+			pup = new PowerUpPickup();
 			this.powerUps.push(pup);
 			this.stage.addChild(pup.sprite);
 		}
@@ -91,15 +92,15 @@ class PowerUpManager {
 	}
 
 	createRandomPowerUp() {
-		PowerUps.enableRandomPowerUp();
+		this.powerUpManager.activateRandomPowerUp();
 	}
 
 }
 
-class PowerUp {
+class PowerUpPickup {
 
 	constructor() {
-		this.sprite = PowerUp.createGraphic();
+		this.sprite = PowerUpPickup.createGraphic();
 		this.rotationSpeed = 4;
 		this.scaleDelta = 0;
 		this.sprite.tint = Util.generateColorFrom(baseColor);
@@ -133,7 +134,7 @@ class PowerUpAnimation {
 
 	constructor(manager) {
 		this.manager = manager;
-		this.sprite = PowerUp.createGraphic();
+		this.sprite = PowerUpPickup.createGraphic();
 		this.sprite.tint = Util.generateColorFrom(baseColor);
 	}
 

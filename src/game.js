@@ -13,6 +13,8 @@ let gamePaused = false;
 class GameScreen extends Screen {
 
 	init() {
+		baseColor = Util.generateColor();
+
 		// layers
 		this.shadowLayer = new PIXI.Container();
 		this.particleLayer = new PIXI.Container();
@@ -24,35 +26,35 @@ class GameScreen extends Screen {
 		this.stage.addChild(this.powerUpAnimationLayer);
 		this.stage.addChild(this.hudLayer);
 
-		this.powerUpManager = new PowerUpManager(this.stage, this.shadowLayer);
-		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
 		this.scoreKeeper = new ScoreKeeper();
+		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
+
+		player = new Player(this.stage, this.shadowLayer, this.particleManager);
+		this.powerUpManager = new PowerUpManager(this.stage, player, this.shadowLayer);
+		this.powerUpPickupManager = new PowerUpPickupManager(this.stage, this.powerUpAnimationLayer, this.powerUpManager);
+
 		this.hud = new HUD(this.stage, this.scoreKeeper);
 		this.leaveBehindText = new LeaveBehindText(this.particleLayer);
 
-		baseColor = Util.generateColor();
-
 		renderer.backgroundColor = baseColor;
 
-		player = new Player(this.stage, this.shadowLayer, this.particleManager);
 		player.addToStage(this.stage, this.shadowLayer);
 		player.onHitBySquare = () => {
 			gameState = STATE_GAME_OVER;
 			this.endGameScreen.show();
 			player.kill();
-			PowerUps.killAll();
+			this.powerUpManager.killAll();
 		};
 
 		squareSpawner = new SquareSpawner(
 			this.stage,
 			this.shadowLayer,
-			this.powerUpManager,
+			this.powerUpPickupManager,
 			this.particleManager,
 			this.scoreKeeper,
 			this.leaveBehindText
 		);
 
-		PowerUps.init(this.stage, this.shadowLayer);
 		PauseScreen.init(this.stage);
 		this.endGameScreen = new EndGameScreen(this.hudLayer, this.scoreKeeper);
 		this.endGameScreen.init();
@@ -80,16 +82,16 @@ class GameScreen extends Screen {
 
 		squareSpawner.update(delta);
 
-		PowerUps.update(delta);
 		this.powerUpManager.update(delta);
+		this.powerUpPickupManager.update(delta);
 
 		player.update(delta);
 
 		this.leaveBehindText.update(delta);
 		this.scoreKeeper.update(delta);
 
-		PowerUps.checkForCollisions(player, squareSpawner);
-		this.powerUpManager.checkForCollisions(player);
+		this.powerUpManager.checkForCollisions(this);
+		this.powerUpPickupManager.checkForCollisions(player);
 		squareSpawner.checkForCollisions(player);
 
 		if (this.endGameScreen.container.visible) {
