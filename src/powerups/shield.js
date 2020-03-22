@@ -5,12 +5,32 @@ class Shield extends PowerUp {
 
         this.stage = stage;
         this.shadowLayer = shadowLayer;
-        this.squareSpawner = squareSpawner;
 
         this.numBulletsInShield = 6;
 
         this.bullets = [];
         this.bulletPool = [];
+
+        this.killTimer = new Timer(15 * 10, () => {
+            this.kill();
+        });
+
+        this.blinkTimer = new Timer(15, () => {
+            for (let bullet of this.bullets) {
+                if (!bullet.active) {
+                    continue;
+                }
+                bullet.sprite.visible = !bullet.sprite.visible;
+                bullet.shadow.visible = bullet.sprite.visible;
+            }
+
+            this.blinkTimer.restart();
+        });
+
+        this.timer = new Timer(60 * 5, () => {
+            this.killTimer.start();
+            this.blinkTimer.start();
+        });
 
         // radians
         this.angle = 0;
@@ -21,6 +41,10 @@ class Shield extends PowerUp {
     reset() {
         this.kill();
         this.bullets = [];
+        
+        this.killTimer.stop();
+        this.blinkTimer.stop();
+        this.timer.restart();
 
         for (let i = 0; i < this.numBulletsInShield; i++) {
             const bullet = this.createBullet();
@@ -43,6 +67,10 @@ class Shield extends PowerUp {
         }
 
         this.checkForCollisions();
+
+        this.killTimer.update(delta);
+        this.blinkTimer.update(delta);
+        this.timer.update(delta);
     }
 
     createBullet() {
@@ -52,6 +80,7 @@ class Shield extends PowerUp {
             this.bullets.push();
             this.stage.addChild(bullet.sprite);
         }
+        bullet.active = true;
         bullet.sprite.visible = true;
         return bullet;
     }
@@ -64,14 +93,17 @@ class Shield extends PowerUp {
     }
 
     killBullet(bullet) {
-        console.log(bullet);
-        
         bullet.sprite.visible = false;
         bullet.shadow.visible = false;
+        bullet.active = false;
         this.bulletPool.push(bullet);
     }
 
     kill() {
+        this.killTimer.stop();
+        this.blinkTimer.stop();
+        this.timer.stop();
+
         for (let bullet of this.bullets) {
             this.killBullet(bullet);
         }
