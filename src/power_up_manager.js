@@ -13,7 +13,8 @@ class PowerUpManager {
 			() => { this.enableShield(); },
 			() => { this.enableTripleShoot() },
 			() => { this.enableRapidFire() },
-			() => { this.enableExplode() }
+			() => { this.enableExplode() },
+			() => { this.enableBouncyBullets() }
 		];
 	}
 
@@ -66,6 +67,10 @@ class PowerUpManager {
 
 	enableRapidFire() {
 		this.activePowerUps.push(new RapidFire(this));
+	}
+
+	enableBouncyBullets() {
+		this.activePowerUps.push(new BouncyBullets(this));
 	}
 
 	enableExplode() {

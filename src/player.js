@@ -20,6 +20,7 @@ const Player = function (stage, shadowLayer, particleManager) {
 	this.bullets = [];
 	this.deadBullets = [];
 	this.bulletSpeed = 8;
+	this.bouncyBullets = false;
 
 	this.guns = [];
 
@@ -86,7 +87,13 @@ Player.prototype.updateBullets = function (delta) {
 		}
 		bullet.update(delta);
 		if (Util.isSpriteOffScreen(bullet.sprite, bullet.sprite.width)) {
-			this.killBullet(bullet);
+			console.log(bullet.bouncy);
+			
+			if (bullet.bouncy) {
+				bullet.bounce();
+			} else {
+				this.killBullet(bullet);
+			}
 		}
 	}
 }
@@ -181,6 +188,8 @@ Player.prototype.createBullet = function () {
 		this.bullets.push(bullet);
 		this.stage.addChild(bullet.sprite);
 	}
+	bullet.bouncy = this.bouncyBullets;
+	
 	bullet.sprite.visible = true;
 	return bullet;
 }
