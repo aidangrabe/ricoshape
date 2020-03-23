@@ -1,4 +1,4 @@
-var TripleShooter = {
+const TripleShooter = {
 
 	shoot: function(player) {
 		var angle = Math.PI / 16;
@@ -20,7 +20,7 @@ var TripleShooter = {
 
 }
 
-var Guns = {
+const Guns = {
 
 	TripleShooter: TripleShooter
 

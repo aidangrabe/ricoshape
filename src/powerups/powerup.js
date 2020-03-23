@@ -6,4 +6,7 @@ class PowerUp {
     update(delta) {
     }
 
+    checkForCollisions(gameScreen) {
+    }
+
 }

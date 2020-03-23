@@ -10,10 +10,10 @@ class PowerUpManager {
 
 		this.activePowerUps = [];
 		this.availablePowerUps = [
-			() => { this.enableShield(); },
-			// () => { this.enableTripleShoot() },
+			// () => { this.enableShield(); },
+			() => { this.enableTripleShoot() },
 			// () => { this.enableRapidFire() },
-			() => { this.enableExplode() }
+			// () => { this.enableExplode() }
 		];
 	}
 
@@ -61,7 +61,7 @@ class PowerUpManager {
 	}
 
 	enableTripleShoot() {
-		// TODO
+		this.activePowerUps.push(new TripleShoot(this));
 	}
 
 	enableRapidFire() {
@@ -81,6 +81,11 @@ class PowerUpManager {
 			bullet.setSpeedAndDirection(player.bulletSpeed, angleDelta * i);
 			bullet.sprite.tint = player.color;
 		}
+	}
+
+	deactivatePowerUp(powerUp) {
+		const pos = this.activePowerUps.indexOf(powerUp);
+		this.activePowerUps.splice(pos, 1);
 	}
 
 }
