@@ -69,7 +69,7 @@ Player.prototype.update = function (delta) {
 		Mouse.y
 	) + Math.PI / 2;
 
-	this.shootTimer--;
+	this.shootTimer -= delta;
 
 	this.updateBullets(delta);
 	this.updateShadow(delta);
@@ -77,7 +77,6 @@ Player.prototype.update = function (delta) {
 	this.applyFriction(delta);
 
 	this.streamSmoke();
-
 }
 
 Player.prototype.updateBullets = function (delta) {

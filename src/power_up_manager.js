@@ -10,10 +10,10 @@ class PowerUpManager {
 
 		this.activePowerUps = [];
 		this.availablePowerUps = [
-			// () => { this.enableShield(); },
+			() => { this.enableShield(); },
 			() => { this.enableTripleShoot() },
-			// () => { this.enableRapidFire() },
-			// () => { this.enableExplode() }
+			() => { this.enableRapidFire() },
+			() => { this.enableExplode() }
 		];
 	}
 
@@ -65,7 +65,7 @@ class PowerUpManager {
 	}
 
 	enableRapidFire() {
-		// TODO
+		this.activePowerUps.push(new RapidFire(this));
 	}
 
 	enableExplode() {
@@ -85,7 +85,11 @@ class PowerUpManager {
 
 	deactivatePowerUp(powerUp) {
 		const pos = this.activePowerUps.indexOf(powerUp);
-		this.activePowerUps.splice(pos, 1);
+		if (pos != -1) {
+			this.activePowerUps.splice(pos, 1);
+		} else {
+			console.error("Tried to remove a power up that wasn't in the active list");
+		}
 	}
 
 }

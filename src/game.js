@@ -58,8 +58,6 @@ class GameScreen extends Screen {
 		PauseScreen.init(this.stage);
 		this.endGameScreen = new EndGameScreen(this.hudLayer, this.scoreKeeper);
 		this.endGameScreen.init();
-
-		this.powerUpManager.activateRandomPowerUp();
 	}
 
 	update(delta) {
