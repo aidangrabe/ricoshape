@@ -87,8 +87,6 @@ Player.prototype.updateBullets = function (delta) {
 		}
 		bullet.update(delta);
 		if (Util.isSpriteOffScreen(bullet.sprite, bullet.sprite.width)) {
-			console.log(bullet.bouncy);
-			
 			if (bullet.bouncy) {
 				bullet.bounce();
 			} else {

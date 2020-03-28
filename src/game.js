@@ -26,11 +26,13 @@ class GameScreen extends Screen {
 		this.stage.addChild(this.powerUpAnimationLayer);
 		this.stage.addChild(this.hudLayer);
 
+		this.entityManager = new EntityManager(this.stage);
+
 		this.scoreKeeper = new ScoreKeeper();
 		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
 
 		player = new Player(this.stage, this.shadowLayer, this.particleManager);
-		this.powerUpManager = new PowerUpManager(this.stage, player, this.shadowLayer);
+		this.powerUpManager = new PowerUpManager(this.entityManager, this.stage, player, this.shadowLayer);
 		this.powerUpPickupManager = new PowerUpPickupManager(this.stage, this.powerUpAnimationLayer, this.powerUpManager);
 
 		this.hud = new HUD(this.stage, this.scoreKeeper);
@@ -79,6 +81,7 @@ class GameScreen extends Screen {
 
 	updateGame(delta) {
 		this.particleManager.update(delta);
+		this.entityManager.update(delta);
 
 		squareSpawner.update(delta);
 
@@ -100,6 +103,7 @@ class GameScreen extends Screen {
 	}
 
 	onKeyPressed(key) {
+		this.entityManager.onKeyPressed(key);
 		//EndGameScreen.onKeyPressed(key);
 	}
 

@@ -3,24 +3,32 @@ const TIME_RAPID_FIRE = 360; // 6 seconds
 
 class PowerUpManager {
 
-	constructor(stage, player, shadowLayer) {
+	constructor(entityManager, stage, player, shadowLayer) {
+		this.entityManager = entityManager;
 		this.stage = stage;
 		this.player = player;
 		this.shadowLayer = shadowLayer;
 
 		this.activePowerUps = [];
-		this.availablePowerUps = [
-			() => { this.enableShield(); },
-			() => { this.enableTripleShoot() },
-			() => { this.enableRapidFire() },
-			() => { this.enableExplode() },
-			() => { this.enableBouncyBullets() }
-		];
+		this.availablePowerUps = {
+			'Shield': () => { this.enableShield(); },
+			'Triple Shot': () => { this.enableTripleShoot() },
+			'Rapid Fire': () => { this.enableRapidFire() },
+			'Explode': () => { this.enableExplode() },
+			'Bouncy Bullets': () => { this.enableBouncyBullets() }
+		};
 	}
 
 	activateRandomPowerUp() {
 		// pick a random power up function and execute it
-		const powerUpFunction = Util.pickRandom(this.availablePowerUps);
+		const powerUpNames = Object.keys(this.availablePowerUps);
+		const powerUpName = Util.pickRandom(powerUpNames);
+		const powerUpFunction = this.availablePowerUps[powerUpName];
+		
+		const x = this.player.sprite.x;
+		const y = this.player.sprite.y;
+		this.entityManager.add(new PowerUpText(powerUpName, x, y));
+
 		powerUpFunction();
 	}
 
