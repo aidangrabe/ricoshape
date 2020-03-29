@@ -8,6 +8,7 @@ class PowerUpText extends Entity {
         super();
 
         this.LIFE = 100;
+        this.SIZE_WIGGLE = 0.1;
 
         this.name = name;
         this.position = new PIXI.Point(x, y);
@@ -27,8 +28,11 @@ class PowerUpText extends Entity {
         // flash the text in and out using a quick sin wave
         const lifeFraction = this.life / this.LIFE;
         const lifePie = lifeFraction * 2 * Math.PI;
+
         const alpha = Math.sin(lifePie * 6);
 
+        this.sprite.scale.x = 1 - alpha * this.SIZE_WIGGLE;
+        this.sprite.scale.y = 1 - alpha * this.SIZE_WIGGLE;
         this.sprite.alpha = alpha;
     }
 
@@ -38,8 +42,10 @@ class PowerUpText extends Entity {
         text.text = this.name;
         text.alpha = 0;
 
-        text.position.x = this.position.x - text.width / 2;
-        text.position.y = this.position.y - text.height / 2;
+        text.pivot.x = text.width / 2;
+        text.pivot.y = text.height / 2;
+        text.position.x = this.position.x;// - text.width / 2;
+        text.position.y = this.position.y;// - text.height / 2;
 
         return text;
     }
