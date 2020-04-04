@@ -9,6 +9,10 @@ class SquareSpawner {
 		this.scoreKeeper = scoreKeeper;
 		this.leaveBehindText = leaveBehindText;
 
+		this.minNumSquares = 0;
+		this.maxNumSquares = 5;
+		this.totalNumberOfFrames = 0;
+
 		this.ONE_IN_X_CHANCE_TO_DROP_POWERUP = 10;
 
 		this.squares = [];
@@ -24,6 +28,39 @@ class SquareSpawner {
 	}
 
 	update(delta) {
+		this.totalNumberOfFrames += delta;
+
+		if (this.totalNumberOfFrames > 35 * 60) {	// 35 seconds
+			this.minNumSquares = 8;
+			this.maxNumSquares = 30;
+		} else if (this.totalNumberOfFrames > 30 * 60) {	// 30 seconds
+			this.minNumSquares = 4;
+			this.maxNumSquares = 15;
+		} else if (this.totalNumberOfFrames > 20 * 60) {	// 20 seconds
+			this.minNumSquares = 3;
+			this.maxNumSquares = 12;
+		} else if (this.totalNumberOfFrames > 15 * 60) {	// 15 seconds
+			this.minNumSquares = 2;
+			this.maxNumSquares = 10;
+		} else if (this.totalNumberOfFrames > 5 * 60) {	// 5 seconds
+			this.minNumSquares = 1;
+			this.maxNumSquares = 7;
+		}
+
+		this.trySpawnSquare(delta);
+	}
+
+	trySpawnSquare(delta) {
+		const numSquares = this.squares.length;
+
+		if (numSquares < this.minNumSquares) {
+			this.spawn();
+		}
+
+		if (numSquares > this.maxNumSquares) {
+			return;
+		}
+
 		const diceRoll = ~~(Math.random() * (60 * delta));
 		if (diceRoll == 1) {
 			this.spawn();
