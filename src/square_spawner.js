@@ -1,6 +1,7 @@
 class SquareSpawner {
 
-	constructor(stage, shadowLayer, powerUpManager, particleManager, scoreKeeper, leaveBehindText) {
+	constructor(entityManager, stage, shadowLayer, powerUpManager, particleManager, scoreKeeper, leaveBehindText) {
+		this.entityManager = entityManager;
 		this.stage = stage;
 		this.shadowLayer = shadowLayer;
 		this.powerUpManager = powerUpManager;
@@ -12,26 +13,17 @@ class SquareSpawner {
 
 		this.squares = [];
 
-		// references any squares that have been destroyed so we can recycle them
-		this.deadSquares = [];
+		this.squarePool = new Pool(() => {
+			const square = new Square(this.shadowLayer, this.scoreKeeper, this.leaveBehindText);
+			square.onKilled = (square) => { this.killSquare(square) };
+			return square;
+		});
 
 		// number of squares to spawn per second
 		this.spawnFrequency = 1;
 	}
 
 	update(delta) {
-		for (let square of this.squares) {
-			if (!square.sprite.visible) {
-				continue;
-			}
-
-			square.update(delta);
-
-			if (square.isOffScreen(200)) {
-				this.killSquare(square);
-			}
-		}
-
 		const diceRoll = ~~(Math.random() * (60 * delta));
 		if (diceRoll == 1) {
 			this.spawn();
@@ -39,32 +31,19 @@ class SquareSpawner {
 	}
 
 	spawn() {
-		let square;
-
-		// resurrect square if possible
-		if (this.deadSquares.length > 0) {
-			square = this.deadSquares.pop();
-		} else {
-			square = new Square(this.stage, this.scoreKeeper, this.leaveBehindText);
-			this.stage.addChild(square.sprite);
-			this.shadowLayer.addChild(square.shadow);
-			this.squares.push(square);
-		}
-
+		const square = this.squarePool.aquire();
 		square.reset();
+		this.entityManager.add(square);
+		this.squares.push(square);
 	}
 
 	killSquare(square) {
-		if (!square.sprite.visible) {
-			// square is already dead, this can happen if two bullets collide at the
-			// same time with the same square
-			return;
+		this.squarePool.recycle(square);
+
+		const index = this.squares.indexOf(square);
+		if (index != -1) {
+			this.squares.splice(index, 1);
 		}
-
-		square.sprite.visible = false;
-		square.shadow.visible = false;
-
-		this.deadSquares.push(square);
 
 		if (Util.oneIn(this.ONE_IN_X_CHANCE_TO_DROP_POWERUP)) {
 			this.powerUpManager.createPowerUpAt(square.sprite.x, square.sprite.y);
@@ -72,7 +51,7 @@ class SquareSpawner {
 	}
 
 	explodeSquare(square) {
-		this.killSquare(square);
+		square.kill();
 		this.particleManager.burstAt(square.sprite.x, square.sprite.y, square.sprite.tint, 30);
 	}
 

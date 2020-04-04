@@ -1,9 +1,13 @@
-class Square {
+class Square extends Entity {
 
-	constructor(stage, scoreKeeper, leaveBehindText) {
-		this.stage = stage;
+	constructor(shadowLayer, scoreKeeper, leaveBehindText) {
+		super();
+
+		this.stage = null;
+		this.shadowLayer = shadowLayer;
 		this.scoreKeeper = scoreKeeper;
 		this.leaveBehindText = leaveBehindText;
+		this.onKilled = () => { };
 
 		this.MAX_SPEED = 5;
 		this.MIN_SPEED = 2;
@@ -23,10 +27,21 @@ class Square {
 			y: 0
 		};
 
-		this.reset();
+		//this.reset();
+	}
+
+	onAddedToStage(stage) {
+		this.stage = stage;
+		this.shadowLayer.addChild(this.shadow);
+	}
+
+	onRemovedFromStage(_stage) {
+		this.stage = null;
+		this.shadowLayer.removeChild(this.shadow);
 	}
 
 	reset() {
+		this.active = true;
 		this.sprite.visible = true;
 		this.moveToStartingPoint();
 
@@ -72,6 +87,17 @@ class Square {
 		return square;
 	}
 
+	onActiveChanged(active) {
+		super.onActiveChanged(active);
+
+		if (!active) {
+			this.sprite.visible = false;
+			this.shadow.visible = false;
+
+			this.onKilled(this);
+		}
+	}
+
 	update(delta) {
 		this.sprite.rotation += this.rotationSpeed * delta;
 		this.moveTowardsTarget(delta);
@@ -79,6 +105,10 @@ class Square {
 		this.shadow.rotation = this.sprite.rotation;
 		this.shadow.x = this.sprite.x;
 		this.shadow.y = this.sprite.y;
+
+		if (this.isOffScreen(200)) {
+			this.kill();
+		}
 	}
 
 	moveToStartingPoint() {
@@ -142,7 +172,7 @@ class Square {
 			|| this.sprite.position.y < -margin;
 	}
 
-	hitByBullet(bullet) {
+	hitByBullet(_bullet) {
 		const scoreEarned = this.scoreKeeper.squareKill(this);
 
 		Quake.shake(this.stage, 10, 10);

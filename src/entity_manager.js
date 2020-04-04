@@ -13,6 +13,10 @@ class EntityManager {
     }
 
     add(entity) {
+        // if (entity in this.entities) {
+        //     throw new Error("Already added!!");
+        // }
+        
         this.entities.push(entity);
         this.stage.addChild(entity.sprite);
         entity.onAddedToStage(this.stage);
@@ -22,6 +26,7 @@ class EntityManager {
         const pos = this.entities.indexOf(entity);
 
         if (pos != -1) {
+            this.stage.removeChild(entity);
             this.entities[pos].onRemovedFromStage(this.stage);
             this.entities.splice(pos, 1);
         }

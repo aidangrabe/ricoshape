@@ -49,6 +49,7 @@ class GameScreen extends Screen {
 		};
 
 		squareSpawner = new SquareSpawner(
+			this.entityManager,
 			this.stage,
 			this.shadowLayer,
 			this.powerUpPickupManager,
