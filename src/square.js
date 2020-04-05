@@ -26,8 +26,6 @@ class Square extends Entity {
 			x: 0,
 			y: 0
 		};
-
-		//this.reset();
 	}
 
 	onAddedToStage(stage) {

@@ -37,6 +37,9 @@ class EntityManager {
             if (entity.active) {
                 entity.update(delta);
             }
+
+            // separate if check so that if an entity becomes inactive during 
+            // its own update
             if (!entity.active) {
                 this.remove(entity);
             }

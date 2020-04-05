@@ -75,11 +75,13 @@ class SquareSpawner {
 	}
 
 	killSquare(square) {
-		this.squarePool.recycle(square);
-
 		const index = this.squares.indexOf(square);
 		if (index != -1) {
 			this.squares.splice(index, 1);
+			this.squarePool.recycle(square);
+		} else {
+			// this can happen if the same square was killed multiple times in the same frame
+			throw new Error("Killed a square that was not in the active list");
 		}
 
 		if (Util.oneIn(this.ONE_IN_X_CHANCE_TO_DROP_POWERUP)) {
@@ -113,11 +115,11 @@ class SquareSpawner {
 
 	checkForBulletCollisions(bullets, killBullet) {
 		for (let square of this.squares) {
-			if (!square.sprite.visible) {
+			if (!square.active) {
 				continue;
 			}
 			for (let bullet of bullets) {
-				if (!bullet.sprite.visible) {
+				if (!bullet.sprite.visible || !square.active) {
 					continue;
 				}
 				if (Util.spriteCollidesWithSprite(square.sprite, bullet.sprite)) {
