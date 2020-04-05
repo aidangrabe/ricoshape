@@ -89,8 +89,7 @@ class PowerUpManager {
 
 		for (let i = 0; i < numberOfBullets; i++) {
 			const bullet = player.createBullet();
-			bullet.sprite.x = player.sprite.x;
-			bullet.sprite.y = player.sprite.y;
+			bullet.setPosition(player.sprite.x, player.sprite.y);
 			bullet.setSpeedAndDirection(player.bulletSpeed, angleDelta * i);
 			bullet.sprite.tint = player.color;
 		}

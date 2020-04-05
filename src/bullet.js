@@ -22,18 +22,15 @@ Bullet.prototype.setSpeedAndDirection = function (speed, direction) {
 }
 
 Bullet.prototype.update = function (delta) {
-	this.sprite.position.x += this.velocity.x * delta;
-	this.sprite.position.y += this.velocity.y * delta;
-	this.shadow.x = this.sprite.x;
-	this.shadow.y = this.sprite.y;
+	const x = this.sprite.position.x + this.velocity.x * delta;
+	const y = this.sprite.position.y + this.velocity.y * delta;
+	this.setPosition(x, y);
+
 	this.shadow.visible = this.sprite.visible;
 }
 
 Bullet.prototype.reset = function (x, y) {
-	this.sprite.position.x = x;
-	this.sprite.position.y = y;
-	this.shadow.position.x = x;
-	this.shadow.position.y = y;
+	this.setPosition(x, y);
 
 	this.bouncy = false;
 	this.bounceCount = 2;
@@ -86,4 +83,11 @@ Bullet.prototype.bounce = function () {
 		this.sprite.position.y = canvas.height;
 		this.velocity.y *= -1;
 	}
+}
+
+Bullet.prototype.setPosition = function (x, y) {
+	this.sprite.position.x = x;
+	this.sprite.position.y = y;
+	this.shadow.position.x = x;
+	this.shadow.position.y = y;
 }
