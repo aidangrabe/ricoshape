@@ -21,6 +21,10 @@ class HUD {
 		stage.addChild(this.layer);
 	}
 
+	hide() {
+		this.layer.visible = false;
+	}
+
 	createComboText() {
 		const text = new PIXI.Text("0");
 		text.align = 'right';

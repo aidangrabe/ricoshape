@@ -100,6 +100,7 @@ class GameScreen extends Screen {
 
 		if (this.endGameScreen.container.visible) {
 			this.endGameScreen.update(delta);
+			this.hud.hide();
 		}
 	}
 
