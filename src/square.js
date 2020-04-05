@@ -7,7 +7,6 @@ class Square extends Entity {
 		this.shadowLayer = shadowLayer;
 		this.scoreKeeper = scoreKeeper;
 		this.leaveBehindText = leaveBehindText;
-		this.onKilled = () => { };
 
 		this.MAX_SPEED = 5;
 		this.MIN_SPEED = 2;
@@ -18,8 +17,8 @@ class Square extends Entity {
 		this.TARGET_ZONE_HEIGHT = canvas.height / 2;
 
 		this.score = 0;
-		this.sprite = this.createSquareGraphic(0xFFFFFF, 32, 32);
-		this.shadow = this.createSquareGraphic(0x000000, 32, 32);
+		this.sprite = Shapes.square(0xFFFFFF, 32, 32);
+		this.shadow = Shapes.square(0x000000, 32, 32);
 		this.shadow.visible = false;
 		this.size = 1;
 		this.velocity = {
@@ -70,30 +69,11 @@ class Square extends Entity {
 		if (Util.oneIn(2)) {
 			this.rotationSpeed *= -1;
 		}
-	}
 
-	createSquareGraphic(color, width, height) {
-		const square = new PIXI.Graphics();
-		square.beginFill(color);
-		square.drawRect(0, 0, width, height);
-		square.endFill();
-		square.pivot = {
-			x: width / 2,
-			y: height / 2
-		};
-		square.cacheAsBitmap = true;
-		return square;
-	}
-
-	onActiveChanged(active) {
-		super.onActiveChanged(active);
-
-		if (!active) {
+		this.on('kill', () => {
 			this.sprite.visible = false;
 			this.shadow.visible = false;
-
-			this.onKilled(this);
-		}
+		});
 	}
 
 	update(delta) {

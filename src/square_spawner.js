@@ -19,7 +19,7 @@ class SquareSpawner {
 
 		this.squarePool = new Pool(() => {
 			const square = new Square(this.shadowLayer, this.scoreKeeper, this.leaveBehindText);
-			square.onKilled = (square) => { this.killSquare(square) };
+			square.on('kill', (square) => { this.killSquare(square) });
 			return square;
 		});
 

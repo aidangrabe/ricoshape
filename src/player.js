@@ -153,6 +153,7 @@ class Player extends Entity {
 		bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
 		bullet.setPosition(this.sprite.position.x, this.sprite.position.y);
 		bullet.sprite.tint = this.color;
+		bullet.bouncy = this.bouncyBullets;
 
 		Sound.play('player.shoot');
 	}
