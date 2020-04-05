@@ -5,8 +5,9 @@ class Bullet extends Entity {
 
 		this.shadowLayer = shadowLayer;
 
-		this.sprite = this.createBulletGraphic(0xFFFFFF, 8);
-		this.shadow = this.createBulletGraphic(0x000000, 8);
+		const radius = 4;
+		this.sprite = Shapes.circle(0xFFFFFF, radius);
+		this.shadow = Shapes.circle(0x000000, radius);
 
 		this.shadowLayer.addChild(this.shadow);
 
@@ -14,10 +15,7 @@ class Bullet extends Entity {
 		this.shadow.height = this.sprite.height + 2;
 
 		this.reset(canvas.width / 2, canvas.height / 2);
-		this.velocity = {
-			x: 0,
-			y: 0
-		};
+		this.velocity = new PIXI.Point(0, 0);
 	}
 
 	setSpeedAndDirection(speed, direction) {
@@ -42,22 +40,6 @@ class Bullet extends Entity {
 
 	hitBySquare(square) {
 		// todo:
-	}
-
-	createBulletGraphic(color, size) {
-		const radius = size / 2;
-
-		const graphics = new PIXI.Graphics();
-		graphics.beginFill(color);
-		graphics.drawCircle(radius, radius, radius);
-		graphics.endFill();
-		graphics.cacheAsBitmap = true;
-		graphics.pivot = {
-			x: radius,
-			y: radius
-		};
-
-		return graphics;
 	}
 
 	bounce() {
