@@ -27,4 +27,8 @@ class EventEmitter {
         }
     }
 
+    removeAllListeners() {
+        this.listeners = {};
+    }
+
 }

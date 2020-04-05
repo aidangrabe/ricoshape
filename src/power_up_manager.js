@@ -14,7 +14,7 @@ class PowerUpManager {
 			'Shield': () => { this.enableShield(); },
 			'Triple Shot': () => { this.enableTripleShoot() },
 			'Rapid Fire': () => { this.enableRapidFire() },
-			'Explode': () => { this.enableExplode() },
+			'Boom!': () => { this.enableExplode() },
 			'Bouncy Bullets': () => { this.enableBouncyBullets() }
 		};
 	}
@@ -50,7 +50,7 @@ class PowerUpManager {
 		}
 
 		if (!reused) {
-			const shield = new Shield(this.stage, this.shadowLayer);
+			const shield = new Shield(this.stage, this.shadowLayer, this.player);
 			this.activePowerUps.push(shield);
 		}
 	}

@@ -1,10 +1,11 @@
 class Shield extends PowerUp {
 
-    constructor(stage, shadowLayer) {
+    constructor(stage, shadowLayer, player) {
         super();
 
         this.stage = stage;
         this.shadowLayer = shadowLayer;
+        this.player = player;
 
         this.numBulletsInShield = 6;
 
@@ -48,7 +49,7 @@ class Shield extends PowerUp {
 
         for (let i = 0; i < this.numBulletsInShield; i++) {
             const bullet = this.createBullet();
-            bullet.sprite.tint = player.color;
+            bullet.sprite.tint = this.player.color;
             this.bullets.push(bullet);
         }
     }
@@ -95,7 +96,7 @@ class Shield extends PowerUp {
     killBullet(bullet) {
         bullet.sprite.visible = false;
         bullet.shadow.visible = false;
-        bullet.active = false;
+        bullet.kill();
         this.bulletPool.push(bullet);
     }
 

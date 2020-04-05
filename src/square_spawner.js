@@ -110,7 +110,8 @@ class SquareSpawner {
 			}
 		}
 
-		this.checkForBulletCollisions(player.bullets, player.killBullet.bind(player));
+		// TODO don't access the bullets directly
+		this.checkForBulletCollisions(player.bulletGroup.items, (bullet) => { bullet.kill(); });
 	}
 
 	checkForBulletCollisions(bullets, killBullet) {

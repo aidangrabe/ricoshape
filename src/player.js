@@ -1,14 +1,17 @@
 class Player extends Entity {
 
-	constructor(stage, shadowLayer, particleManager) {
+	constructor(stage, shadowLayer, particleManager, entityManager) {
 		super();
 
 		this.stage = stage;
 		this.shadowLayer = shadowLayer;
 		this.particleManager = particleManager;
-	
+		this.bulletGroup = new EntityGroup(entityManager, () => {
+			return new Bullet(this.shadowLayer);
+		});
+
 		this.color = Util.generateColorFrom(baseColor);
-	
+
 		this.sprite = this.createPlayerSprite();
 		this.shadow = this.createPlayerShadow();
 		this.rotationSpeed = 0.1;
@@ -18,23 +21,21 @@ class Player extends Entity {
 		this.velocity = { x: 0, y: 0 };
 		this.recoilMagnitude = 0.8;
 		this.originalShootInterval = 10;
-	
+
 		this.shootInterval = 10;
 		this.shootTimer = 0;
-		this.bullets = [];
-		this.deadBullets = [];
 		this.bulletSpeed = 8;
 		this.bouncyBullets = false;
-	
+
 		this.guns = [];
-	
+
 		// setup key map
 		this.DOWN_KEY = Keys.S;
 		this.UP_KEY = Keys.W;
 		this.LEFT_KEY = Keys.A;
 		this.RIGHT_KEY = Keys.D;
 		this.SHOOT_KEY = Keys.SPACE;
-	
+
 		this.smokeColors = [
 			0xFFFFFF, 0xEEEEEE, 0xFEFEFE, 0xEFEFEF
 		];
@@ -43,7 +44,7 @@ class Player extends Entity {
 	addToStage(_, shadowLayer) {
 		this.sprite.position.x = canvas.width / 2;
 		this.sprite.position.y = canvas.height / 2;
-	
+
 		shadowLayer.addChild(this.shadow);
 	}
 
@@ -59,67 +60,44 @@ class Player extends Entity {
 
 	update(delta) {
 		this.handleInput(delta);
-	
+
 		// movement
 		this.sprite.position.x += this.velocity.x;
 		this.sprite.position.y += this.velocity.y;
-	
+
 		this.sprite.rotation = Geom.angleBetweenCoords(
 			this.sprite.position.x,
 			this.sprite.position.y,
 			Mouse.x,
 			Mouse.y
 		) + Math.PI / 2;
-	
+
 		this.shootTimer -= delta;
-	
-		this.updateBullets(delta);
+
 		this.updateShadow(delta);
 		this.keepOnScreen(delta);
 		this.applyFriction(delta);
-	
+
 		this.streamSmoke();
-	}
-
-	updateBullets(delta) {
-		for (let bullet of this.bullets) {
-			if (!bullet.sprite.visible) {
-				continue;
-			}
-			bullet.update(delta);
-			if (Util.isSpriteOffScreen(bullet.sprite, bullet.sprite.width)) {
-				if (bullet.bouncy) {
-					bullet.bounce();
-				} else {
-					this.killBullet(bullet);
-				}
-			}
-		}
-	}
-
-	killBullet(bullet) {
-		bullet.kill();
-
-		this.deadBullets.push(bullet);
 	}
 
 	handleInput(delta) {
 		if (Input.isKeyDown(this.LEFT_KEY)) {
 			this.addMotion(Geom.ANGLE_LEFT, this.acceleration * delta);
 		}
-	
+
 		if (Input.isKeyDown(this.RIGHT_KEY)) {
 			this.addMotion(Geom.ANGLE_RIGHT, this.acceleration * delta);
 		}
-	
+
 		if (Input.isKeyDown(this.UP_KEY)) {
 			this.addMotion(Geom.ANGLE_UP, this.acceleration * delta);
 		}
-	
+
 		if (Input.isKeyDown(this.DOWN_KEY)) {
 			this.addMotion(Geom.ANGLE_DOWN, this.acceleration * delta);
 		}
-	
+
 		// TODO pointer index?
 		if (Input.isPointerDown(0) || Input.isKeyDown(this.SHOOT_KEY)) {
 			this.shoot();
@@ -160,41 +138,32 @@ class Player extends Entity {
 		if (!this.sprite.visible || this.shootTimer > 0) {
 			return;
 		}
-	
+
 		// recoil in the opposite direction the player is facing
 		this.addMotion(Math.PI + this.sprite.rotation, this.recoilMagnitude);
-	
+
 		for (let gun of this.guns) {
 			gun.shoot(this);
 		}
-	
+
 		this.shootTimer = this.shootInterval;
-	
-		const bullet = this.createBullet();
+
+		const bullet = this.bulletGroup.create();
+
 		bullet.setSpeedAndDirection(this.bulletSpeed, this.sprite.rotation);
-		bullet.sprite.position = this.sprite.position;
+		bullet.setPosition(this.sprite.position.x, this.sprite.position.y);
 		bullet.sprite.tint = this.color;
-	
+
 		Sound.play('player.shoot');
 	}
 
+	// TODO remove when other classes no longer use it
 	createBullet() {
-		let bullet;
-		if (this.deadBullets.length > 0) {
-			bullet = this.deadBullets.pop();
-		} else {
-			bullet = new Bullet(this.shadowLayer);
-			this.bullets.push(bullet);
-			this.stage.addChild(bullet.sprite);
-		}
-		bullet.bouncy = this.bouncyBullets;
-		
-		bullet.sprite.visible = true;
-		return bullet;
+		return this.bulletGroup.create();
 	}
 
 	// diminish a value by percentage, until it is smaller than minimum.
-// then set it to 0
+	// then set it to 0
 	dampen(value, percentage, minumum) {
 		if (Math.abs(value) > minumum) {
 			value *= percentage;
@@ -209,7 +178,7 @@ class Player extends Entity {
 		this.shadow.rotation = this.sprite.rotation;
 	}
 
-	hitBySquare (square) {
+	hitBySquare(square) {
 		Quake.shake(this.stage, 50, 20);
 		Sound.play('player.hit');
 		if (this.onHitBySquare != undefined) {
@@ -229,10 +198,10 @@ class Player extends Entity {
 		if (!this.sprite.visible) {
 			return;
 		}
-	
+
 		const oppositeDir = Math.PI + this.sprite.rotation;
 		const length = this.sprite.width / 4;
-	
+
 		this.particleManager.burstInDirectionAt(
 			this.sprite.x + Util.lengthDirX(length, oppositeDir),
 			this.sprite.y + Util.lengthDirY(length, oppositeDir),

@@ -3,7 +3,6 @@
 const STATE_GAME = 0;
 const STATE_GAME_OVER = 1;
 
-let player;
 let squareSpawner;
 let baseColor;
 
@@ -31,8 +30,8 @@ class GameScreen extends Screen {
 		this.scoreKeeper = new ScoreKeeper();
 		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
 
-		player = new Player(this.stage, this.shadowLayer, this.particleManager);
-		this.powerUpManager = new PowerUpManager(this.entityManager, this.stage, player, this.shadowLayer);
+		this.player = new Player(this.stage, this.shadowLayer, this.particleManager, this.entityManager);
+		this.powerUpManager = new PowerUpManager(this.entityManager, this.stage, this.player, this.shadowLayer);
 		this.powerUpPickupManager = new PowerUpPickupManager(this.stage, this.powerUpAnimationLayer, this.powerUpManager);
 
 		this.hud = new HUD(this.stage, this.scoreKeeper);
@@ -40,12 +39,12 @@ class GameScreen extends Screen {
 
 		renderer.backgroundColor = baseColor;
 
-		this.entityManager.add(player);
-		player.addToStage(this.stage, this.shadowLayer);
-		player.onHitBySquare = () => {
+		this.entityManager.add(this.player);
+		this.player.addToStage(this.stage, this.shadowLayer);
+		this.player.onHitBySquare = () => {
 			gameState = STATE_GAME_OVER;
 			this.endGameScreen.show();
-			player.kill();
+			this.player.kill();
 			this.powerUpManager.killAll();
 		};
 
@@ -94,8 +93,8 @@ class GameScreen extends Screen {
 		this.scoreKeeper.update(delta);
 
 		this.powerUpManager.checkForCollisions(this);
-		this.powerUpPickupManager.checkForCollisions(player);
-		squareSpawner.checkForCollisions(player);
+		this.powerUpPickupManager.checkForCollisions(this.player);
+		squareSpawner.checkForCollisions(this.player);
 
 		if (this.endGameScreen.container.visible) {
 			this.endGameScreen.update(delta);

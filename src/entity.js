@@ -46,7 +46,8 @@ class Entity {
     }
 
     kill() {
-        this.emitEvent('kill');
+        this.emitEvent('kill', this);
+        this._emitter.removeAllListeners();
         this.active = false;
     }
 

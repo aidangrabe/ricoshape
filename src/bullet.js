@@ -36,6 +36,14 @@ class Bullet extends Entity {
 		this.setPosition(x, y);
 
 		this.shadow.visible = this.sprite.visible;
+
+		if (Util.isSpriteOffScreen(this.sprite, this.sprite.width)) {
+			if (this.bouncy) {
+				this.bounce();
+			} else {
+				this.kill();
+			}
+		}
 	}
 
 	reset(x, y) {
