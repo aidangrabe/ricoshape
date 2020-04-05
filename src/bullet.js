@@ -18,6 +18,13 @@ class Bullet extends Entity {
 		this.velocity = new PIXI.Point(0, 0);
 	}
 
+	onActiveChanged(active) {
+		super.onActiveChanged(active);
+
+		this.sprite.visible = active;
+		this.shadow.visible = active;
+	}
+
 	setSpeedAndDirection(speed, direction) {
 		this.velocity.x = Math.sin(direction) * speed;
 		this.velocity.y = -Math.cos(direction) * speed;

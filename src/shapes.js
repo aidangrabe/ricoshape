@@ -16,4 +16,25 @@ class Shapes {
         return graphics;
     }
 
+    static triangle(color, width, height) {
+		const graphics = new PIXI.Graphics();
+	
+		graphics.beginFill(color);
+		graphics.drawPolygon([
+			0, height,
+			width / 2, 0,	// tip
+			width, height,
+			0, height
+		]);
+        graphics.endFill();
+        
+		graphics.pivot = {
+			x: width / 2,
+			y: height / 3 * 2
+		};
+		graphics.cacheAsBitmap = true;
+	
+		return graphics;
+	}
+
 }

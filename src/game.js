@@ -40,6 +40,7 @@ class GameScreen extends Screen {
 
 		renderer.backgroundColor = baseColor;
 
+		this.entityManager.add(player);
 		player.addToStage(this.stage, this.shadowLayer);
 		player.onHitBySquare = () => {
 			gameState = STATE_GAME_OVER;
@@ -88,8 +89,6 @@ class GameScreen extends Screen {
 
 		this.powerUpManager.update(delta);
 		this.powerUpPickupManager.update(delta);
-
-		player.update(delta);
 
 		this.leaveBehindText.update(delta);
 		this.scoreKeeper.update(delta);
