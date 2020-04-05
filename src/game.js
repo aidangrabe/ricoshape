@@ -65,8 +65,10 @@ class GameScreen extends Screen {
 
 	update(delta) {
 		if (Input.isKeyPressed(Keys.P)) {
-			gamePaused = !gamePaused;
-			PauseScreen.setPauseMode(gamePaused);
+			if (gameState != STATE_GAME_OVER) {
+				gamePaused = !gamePaused;
+				PauseScreen.setPauseMode(gamePaused);
+			}
 		}
 
 		if (Input.isKeyPressed(Keys.F)) {
