@@ -61,8 +61,8 @@ class Shield extends PowerUp {
         let i = 0;
 
         for (let bullet of this.bullets) {
-            bullet.sprite.x = player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
-            bullet.sprite.y = player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
+            bullet.sprite.x = this.player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
+            bullet.sprite.y = this.player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
             bullet.update(delta);
             i++;
         }

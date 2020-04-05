@@ -48,7 +48,6 @@ class Square extends Entity {
 		this.sprite.tint = Util.generateColorFrom(baseColor);
 
 		this.size = Util.randomBetween(this.MIN_SIZE, this.MAX_SIZE);
-		this.sprite.tint = Util.generateColorFrom(baseColor);
 		this.sprite.scale = {
 			x: this.size,
 			y: this.size
