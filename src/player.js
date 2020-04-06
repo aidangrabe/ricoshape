@@ -1,14 +1,12 @@
 class Player extends Entity {
 
-	constructor(stage, shadowLayer, particleManager, entityManager) {
+	constructor(stage, shadowLayer, particleManager, bulletGroup) {
 		super();
 
 		this.stage = stage;
 		this.shadowLayer = shadowLayer;
 		this.particleManager = particleManager;
-		this.bulletGroup = new EntityGroup(entityManager, () => {
-			return new Bullet(this.shadowLayer);
-		});
+		this.bulletGroup = bulletGroup;
 
 		this.color = Util.generateColorFrom(baseColor);
 

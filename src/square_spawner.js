@@ -1,6 +1,6 @@
 class SquareSpawner {
 
-	constructor(entityManager, stage, shadowLayer, powerUpManager, particleManager, scoreKeeper, leaveBehindText) {
+	constructor(entityManager, stage, shadowLayer, powerUpManager, particleManager, scoreKeeper, leaveBehindText, bulletGroup) {
 		this.entityManager = entityManager;
 		this.stage = stage;
 		this.shadowLayer = shadowLayer;
@@ -8,6 +8,7 @@ class SquareSpawner {
 		this.particleManager = particleManager;
 		this.scoreKeeper = scoreKeeper;
 		this.leaveBehindText = leaveBehindText;
+		this.bulletGroup = bulletGroup;
 
 		this.minNumSquares = 0;
 		this.maxNumSquares = 5;
@@ -111,26 +112,20 @@ class SquareSpawner {
 		}
 
 		// TODO don't access the bullets directly
-		this.checkForBulletCollisions(player.bulletGroup.items, (bullet) => { bullet.kill(); });
+		this.checkForBulletCollisions();
 	}
 
-	checkForBulletCollisions(bullets, killBullet) {
+	checkForBulletCollisions() {
 		for (let square of this.squares) {
 			if (!square.active) {
 				continue;
 			}
-			for (let bullet of bullets) {
-				if (!bullet.sprite.visible || !square.active) {
-					continue;
-				}
-				if (Util.spriteCollidesWithSprite(square.sprite, bullet.sprite)) {
-					bullet.hitBySquare(square);
-					square.hitByBullet(bullet);
 
-					killBullet(bullet);
-					this.explodeSquare(square);
-				}
-			}
+			this.bulletGroup.checkForCollisionsWith(square, (bullet) => {
+				bullet.kill();
+				square.hitByBullet(bullet);
+				this.explodeSquare(square);
+			});
 		}
 	}
 

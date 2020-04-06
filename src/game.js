@@ -29,8 +29,11 @@ class GameScreen extends Screen {
 
 		this.scoreKeeper = new ScoreKeeper();
 		this.particleManager = new ParticleManager(this.particleLayer, this.shadowLayer);
+		this.bulletGroup = new EntityGroup(this.entityManager, () => {
+			return new Bullet(this.shadowLayer);
+		});
 
-		this.player = new Player(this.stage, this.shadowLayer, this.particleManager, this.entityManager);
+		this.player = new Player(this.stage, this.shadowLayer, this.particleManager, this.bulletGroup);
 		this.powerUpManager = new PowerUpManager(this.entityManager, this.stage, this.player, this.shadowLayer);
 		this.powerUpPickupManager = new PowerUpPickupManager(this.stage, this.powerUpAnimationLayer, this.powerUpManager);
 
@@ -55,7 +58,8 @@ class GameScreen extends Screen {
 			this.powerUpPickupManager,
 			this.particleManager,
 			this.scoreKeeper,
-			this.leaveBehindText
+			this.leaveBehindText,
+			this.bulletGroup
 		);
 
 		PauseScreen.init(this.stage);

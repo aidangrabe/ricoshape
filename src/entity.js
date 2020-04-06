@@ -51,4 +51,8 @@ class Entity {
         this.active = false;
     }
 
+    intersects(sprite) {
+        return Util.spriteCollidesWithSprite(this.sprite, sprite);
+    }
+
 }
