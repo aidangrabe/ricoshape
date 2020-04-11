@@ -7,13 +7,18 @@
 	<style>
 		body,
 		html {
+			background: #EEE;
 			height: 100%;
 			margin: 0;
 			padding: 0;
 		}
 
 		canvas {
-			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			right: 0;
+			bottom: 0;
 			margin: auto;
 		}
 	</style>
@@ -26,7 +31,7 @@
 
 <body>
 
-	<canvas id="game-canvas" width="640" height="480">Canvas not supported :(</canvas>
+	<canvas id="game-canvas" width="720" height="540">Canvas not supported :(</canvas>
 
 	<script type="text/javascript" src="lib/pixijs-5.1.6.js"></script>
 	<script type="text/javascript" src="lib/soundjs-1.0.0.js"></script>
@@ -73,7 +78,6 @@
 
 	<script type="text/javascript" src="src/game.js"></script>
 	<script type="text/javascript" src="src/main.js"></script>
-
 
 </body>
 
