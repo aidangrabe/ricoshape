@@ -46,6 +46,11 @@ class Entity {
     }
 
     kill() {
+        if (!this.active) {
+            // already dead
+            return;
+        }
+
         this.emitEvent('kill', this);
         this._emitter.removeAllListeners();
         this.active = false;

@@ -43,9 +43,12 @@ class EntityManager {
             if (entity.active) {
                 entity.update(delta);
             }
+        }
 
-            // separate if check so that if an entity becomes inactive during 
-            // its own update
+        // remove dead entities
+        // needs a 2nd for loop because we shouldn't modify the entities array
+        // while looping
+        for (let entity of this.entities) {
             if (!entity.active) {
                 this.remove(entity);
             }

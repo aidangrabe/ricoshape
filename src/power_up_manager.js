@@ -50,7 +50,7 @@ class PowerUpManager {
 		}
 
 		if (!reused) {
-			const shield = new Shield(this.stage, this.shadowLayer, this.player);
+			const shield = new Shield(this.stage, this.shadowLayer, this.player, this.entityManager);
 			this.activePowerUps.push(shield);
 		}
 	}

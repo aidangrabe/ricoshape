@@ -1,6 +1,6 @@
 class Shield extends PowerUp {
 
-    constructor(stage, shadowLayer, player) {
+    constructor(stage, shadowLayer, player, entityManager) {
         super();
 
         this.stage = stage;
@@ -9,15 +9,16 @@ class Shield extends PowerUp {
 
         this.numBulletsInShield = 6;
 
-        this.bullets = [];
-        this.bulletPool = [];
+        this.bulletGroup = new EntityGroup(entityManager, () => {
+            return new Bullet(this.shadowLayer);
+        });
 
         this.killTimer = new Timer(15 * 10, () => {
             this.kill();
         });
 
         this.blinkTimer = new Timer(15, () => {
-            for (let bullet of this.bullets) {
+            for (let bullet of this.bulletGroup.items) {
                 if (!bullet.active) {
                     continue;
                 }
@@ -41,16 +42,14 @@ class Shield extends PowerUp {
 
     reset() {
         this.kill();
-        this.bullets = [];
-        
+
         this.killTimer.stop();
         this.blinkTimer.stop();
         this.timer.restart();
 
         for (let i = 0; i < this.numBulletsInShield; i++) {
-            const bullet = this.createBullet();
+            const bullet = this.bulletGroup.create();
             bullet.sprite.tint = this.player.color;
-            this.bullets.push(bullet);
         }
     }
 
@@ -60,10 +59,10 @@ class Shield extends PowerUp {
 
         let i = 0;
 
-        for (let bullet of this.bullets) {
-            bullet.sprite.x = this.player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
-            bullet.sprite.y = this.player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
-            bullet.update(delta);
+        for (let bullet of this.bulletGroup.items) {
+            const x = this.player.sprite.x + Util.lengthDirX(40, this.angle + angleDelta * i);
+            const y = this.player.sprite.y + Util.lengthDirY(40, this.angle + angleDelta * i);
+            bullet.setPosition(x, y);
             i++;
         }
 
@@ -74,30 +73,8 @@ class Shield extends PowerUp {
         this.timer.update(delta);
     }
 
-    createBullet() {
-        let bullet = this.bulletPool.pop();
-        if (typeof bullet === 'undefined') {
-            bullet = new Bullet(this.shadowLayer);
-            this.bullets.push();
-            this.stage.addChild(bullet.sprite);
-        }
-        bullet.active = true;
-        bullet.sprite.visible = true;
-        return bullet;
-    }
-
-    checkForCollisions(gameScreen) {
-        if (this.bullets.length == 0) {
-            return;
-        }
-        squareSpawner.checkForBulletCollisions(this.bullets, (bullet) => { this.killBullet(bullet) });
-    }
-
-    killBullet(bullet) {
-        bullet.sprite.visible = false;
-        bullet.shadow.visible = false;
-        bullet.kill();
-        this.bulletPool.push(bullet);
+    checkForCollisions() {
+        squareSpawner.checkForBulletCollisions(this.bulletGroup);
     }
 
     kill() {
@@ -105,9 +82,7 @@ class Shield extends PowerUp {
         this.blinkTimer.stop();
         this.timer.stop();
 
-        for (let bullet of this.bullets) {
-            this.killBullet(bullet);
-        }
+        this.bulletGroup.reset();
     }
 
 }

@@ -20,7 +20,6 @@ class SquareSpawner {
 
 		this.squarePool = new Pool(() => {
 			const square = new Square(this.shadowLayer, this.scoreKeeper, this.leaveBehindText);
-			square.on('kill', (square) => { this.killSquare(square) });
 			return square;
 		});
 
@@ -71,6 +70,9 @@ class SquareSpawner {
 	spawn() {
 		const square = this.squarePool.aquire();
 		square.reset();
+		square.on('kill', (square) => { 
+			this.killSquare(square);
+		 });
 		this.entityManager.add(square);
 		this.squares.push(square);
 	}
@@ -112,16 +114,16 @@ class SquareSpawner {
 		}
 
 		// TODO don't access the bullets directly
-		this.checkForBulletCollisions();
+		this.checkForBulletCollisions(this.bulletGroup);
 	}
 
-	checkForBulletCollisions() {
+	checkForBulletCollisions(bulletGroup) {
 		for (let square of this.squares) {
 			if (!square.active) {
 				continue;
 			}
 
-			this.bulletGroup.checkForCollisionsWith(square, (bullet) => {
+			bulletGroup.checkForCollisionsWith(square, (bullet) => {
 				bullet.kill();
 				square.hitByBullet(bullet);
 				this.explodeSquare(square);

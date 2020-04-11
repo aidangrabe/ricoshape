@@ -47,6 +47,9 @@ class Bullet extends Entity {
 	}
 
 	reset(x, y) {
+		this.active = true;
+		this.sprite.visible = true;
+		this.shadow.visible = true;
 		this.setPosition(x, y);
 
 		this.bouncy = false;
