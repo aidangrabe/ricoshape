@@ -7,6 +7,13 @@ const Fonts = {
 		fill: '#FFFFFF'
 	},
 
+	EndGameStats: {
+		fontFamily: 'Arial',
+		fontStyle: 'bold',
+		fontSize: '24px',
+		fill: '#FFFFFF'
+	},
+
 	LeaveBehindText: {
 		fontFamily: 'Arial',
 		fontStyle: 'bold',

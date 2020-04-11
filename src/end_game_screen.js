@@ -19,6 +19,7 @@ class EndGameScreen {
 
 		this.insultText = this.createInsultText();
 		this.scoreText = this.createScoreText();
+		this.highScoreText = this.createHighScoreText();
 		this.playAgainText = this.createPlayAgainButton();
 
 		this.playAgainText.interactive = true;
@@ -27,6 +28,7 @@ class EndGameScreen {
 		this.container.addChild(this.insultText);
 		this.container.addChild(this.scoreText);
 		this.container.addChild(this.playAgainText);
+		this.container.addChild(this.highScoreText);
 
 		this.stage.addChild(this.container);
 
@@ -44,6 +46,8 @@ class EndGameScreen {
 		this.container.visible = true;
 
 		this.playAgainFadeDuration = 60;
+
+		this.updateHighScore();
 	}
 
 	hide() {
@@ -56,6 +60,31 @@ class EndGameScreen {
 		}
 
 		//this.playAgainText.alpha = 1 / this.playAgainFadeDuration * 2;
+	}
+
+	updateHighScore() {
+		const score = this.getScore();
+		const highScore = this.getHighScore();
+
+		if (score > highScore) {
+			this.setHighScore(score);
+		}
+
+		this.highScoreText.text = `High score: ${this.getHighScore()}`;
+		this.highScoreText.pivot.x = this.highScoreText.width / 2;
+	}
+
+	getHighScore() {
+		const localStorage = window.localStorage;
+		const score = localStorage.getItem('highscore');
+
+		if (score == null) return 0;
+		return parseInt(score);
+	}
+
+	setHighScore(score) {
+		const localStorage = window.localStorage;
+		localStorage.setItem('highscore', score);
 	}
 
 	getScore() {
@@ -90,6 +119,16 @@ class EndGameScreen {
 		text.style.fill = Util.generateColorFrom(baseColor);
 		text.x = canvas.width / 2;
 		text.y = canvas.height / 2;
+		return text;
+	}
+
+	createHighScoreText() {
+		const text = new PIXI.Text();
+		text.style = Fonts.EndGameStats;
+		text.x = canvas.width / 2;
+		// pin to bottom
+		text.y = canvas.height - text.height - 10;
+		text.alpha = 0.5;
 		return text;
 	}
 
