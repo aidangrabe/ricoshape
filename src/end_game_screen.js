@@ -23,7 +23,15 @@ class EndGameScreen {
 		this.playAgainText = this.createPlayAgainButton();
 
 		this.playAgainText.interactive = true;
-		this.playAgainText.on('pointerdown', (_) => this.playAgain());
+		this.playAgainText.on('pointerover', (_) => {
+			this.playAgainText.alpha = 1;
+		});
+		this.playAgainText.on('pointerout', (_) => {
+			this.playAgainText.alpha = 0.9;
+		});
+		this.playAgainText.on('pointerup', (_) => {
+			this.playAgain();
+		});
 
 		this.container.addChild(this.insultText);
 		this.container.addChild(this.scoreText);
@@ -58,8 +66,6 @@ class EndGameScreen {
 		if (this.playAgainFadeDuration > 0) {
 			this.playAgainFadeDuration -= delta;
 		}
-
-		//this.playAgainText.alpha = 1 / this.playAgainFadeDuration * 2;
 	}
 
 	updateHighScore() {
@@ -139,6 +145,7 @@ class EndGameScreen {
 		text.pivot.x = text.width / 2;
 		text.x = canvas.width / 2;
 		text.y = canvas.height / 2 + 75;
+		text.alpha = 0.9;
 		return text;
 	}
 
