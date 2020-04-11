@@ -48,7 +48,7 @@ class Shapes {
 			x: width / 2,
 			y: height / 2
 		};
-		graphics.cacheAsBitmap = true;
+		//graphics.cacheAsBitmap = true;
 
 		return graphics;
 	}

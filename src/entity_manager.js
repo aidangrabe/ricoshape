@@ -23,21 +23,6 @@ class EntityManager {
         entity.onAddedToStage(this.stage);
     }
 
-    remove(entity) {
-        const pos = this.entities.indexOf(entity);
-
-        if (pos != -1) {
-            if (entity.sprite != null) {
-                this.stage.removeChild(entity);
-            }
-
-            // TODO change to event?
-            entity.onRemovedFromStage(this.stage);
-
-            this.entities.splice(pos, 1);
-        }
-    }
-
     update(delta) {
         for (let entity of this.entities) {
             if (entity.active) {
@@ -45,14 +30,25 @@ class EntityManager {
             }
         }
 
-        // remove dead entities
-        // needs a 2nd for loop because we shouldn't modify the entities array
-        // while looping
+        this.postUpdate(delta);
+    }
+
+    postUpdate(delta) {
         for (let entity of this.entities) {
-            if (!entity.active) {
-                this.remove(entity);
+            if (entity.active) {
+                entity.postUpdate(delta);
             }
         }
+
+        // remove dead entities
+        this.entities = this.entities.filter((entity) => {
+            if (!entity.active && entity.sprite != null) {
+                this.stage.removeChild(entity);
+                entity.onRemovedFromStage(this.stage);
+            }
+
+            return entity.active;
+        });
     }
 
     onKeyPressed(key) {

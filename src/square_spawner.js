@@ -57,7 +57,7 @@ class SquareSpawner {
 			this.spawn();
 		}
 
-		if (numSquares > this.maxNumSquares) {
+		if (numSquares >= this.maxNumSquares) {
 			return;
 		}
 
@@ -70,9 +70,9 @@ class SquareSpawner {
 	spawn() {
 		const square = this.squarePool.aquire();
 		square.reset();
-		square.on('kill', (square) => { 
+		square.on('kill', (square) => {
 			this.killSquare(square);
-		 });
+		});
 		this.entityManager.add(square);
 		this.squares.push(square);
 	}
@@ -118,13 +118,16 @@ class SquareSpawner {
 	}
 
 	checkForBulletCollisions(bulletGroup) {
-		for (let square of this.squares) {
+		for (let i = this.squares.length - 1; i >= 0; i--) {
+			const square = this.squares[i];
+
 			if (!square.active) {
 				continue;
 			}
 
 			bulletGroup.checkForCollisionsWith(square, (bullet) => {
 				bullet.kill();
+
 				square.hitByBullet(bullet);
 				this.explodeSquare(square);
 			});

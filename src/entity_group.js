@@ -35,7 +35,10 @@ class EntityGroup {
 
         const items = this.items;
 
-        for (let item of items) {
+        
+        for (let i = items.length - 1; i >= 0; i--) {
+            const item = items[i];
+
             // ignore inactive items, even though items should only contain 
             // active entities
             if (!item.active) {

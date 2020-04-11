@@ -34,6 +34,9 @@ class Entity {
     update(delta) {
     }
 
+    postUpdate(delta) {
+    }
+
     onRemovedFromStage(stage) {
         this.emitEvent('stage.remove');
     }
