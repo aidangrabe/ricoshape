@@ -82,6 +82,10 @@ class EndGameScreen {
 			this.setHighScore(score);
 		}
 
+		this.updateHighScoreText();
+	}
+
+	updateHighScoreText() {
 		this.highScoreText.text = `High score: ${this.getHighScore()}`;
 		this.highScoreText.pivot.x = this.highScoreText.width / 2;
 	}
@@ -136,11 +140,23 @@ class EndGameScreen {
 
 	createHighScoreText() {
 		const text = new PIXI.Text();
+		text.interactive = true;
 		text.style = Fonts.EndGameStats;
 		text.x = canvas.width / 2;
 		// pin to bottom
 		text.y = canvas.height - text.height - 10;
 		text.alpha = 0.5;
+
+		text.on('pointerdown', (_) => {
+			console.log("Click!");
+
+			const wantsToClearHighScore = confirm("Reset the highscore?");
+			if (wantsToClearHighScore) {
+				this.setHighScore(0);
+				this.updateHighScoreText();
+			}
+		});
+
 		return text;
 	}
 
