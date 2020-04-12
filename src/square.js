@@ -161,6 +161,10 @@ class Square extends Entity {
 	calculateScore() {
 		this.score = (this.MAX_SIZE + this.MIN_SIZE - this.size) * this.speed;
 		this.score = ~~this.score;
+
+		if (this.score == 0) {
+			console.log("Score was zero!! " + this.size + "" + this.speed);
+		}
 	}
 
 	hitByPlayer() {

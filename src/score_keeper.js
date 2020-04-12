@@ -13,7 +13,7 @@ class ScoreKeeper {
             this.comboTimer -= delta;
 
             if (this.comboTimer <= 0) {
-                this.comboMultiplier -= 1;
+                this.comboMultiplier = 1;
 
                 this.resetComboTimer();
             }
