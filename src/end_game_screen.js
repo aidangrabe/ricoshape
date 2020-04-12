@@ -22,6 +22,7 @@ class EndGameScreen {
 		this.highScoreText = this.createHighScoreText();
 		this.playAgainText = this.createPlayAgainButton();
 
+		this.playAgainButtonClicked = false;
 		this.playAgainText.interactive = true;
 		this.playAgainText.on('pointerover', (_) => {
 			this.playAgainText.alpha = 1;
@@ -29,8 +30,13 @@ class EndGameScreen {
 		this.playAgainText.on('pointerout', (_) => {
 			this.playAgainText.alpha = 0.9;
 		});
+		this.playAgainText.on('pointerdown', (_) => {
+			this.playAgainButtonClicked = true;
+		});
 		this.playAgainText.on('pointerup', (_) => {
-			this.playAgain();
+			if (this.playAgainButtonClicked) {
+				this.playAgain();
+			}
 		});
 
 		this.container.addChild(this.insultText);
