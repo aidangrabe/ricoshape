@@ -4,24 +4,7 @@
 
 <head>
 	<title>Ricoshape</title>
-	<style>
-		body,
-		html {
-			background: #EEE;
-			height: 100%;
-			margin: 0;
-			padding: 0;
-		}
-
-		canvas {
-			position: absolute;
-			top: 0;
-			left: 0;
-			right: 0;
-			bottom: 0;
-			margin: auto;
-		}
-	</style>
+	<link type="text/css" rel="stylesheet" href="styles.css" />
 	<script type="text/javascript">
 		// window.onerror = function (msg, url, linenumber) {
 		// 	alert('Error message: ' + msg + '\nURL: ' + url + '\nLine Number: ' + linenumber);
@@ -32,6 +15,15 @@
 <body>
 
 	<canvas id="game-canvas" width="720" height="540">Canvas not supported :(</canvas>
+
+	<div id="controls">
+		<h2>Controls</h2>
+		<p>
+			WASD - Movement<br />
+			Left mouse - shoot<br />
+			P - Pause
+		</p>
+	</div>
 
 	<script type="text/javascript" src="lib/pixijs-5.1.6.js"></script>
 	<script type="text/javascript" src="lib/soundjs-1.0.0.js"></script>
@@ -78,6 +70,16 @@
 
 	<script type="text/javascript" src="src/game.js"></script>
 	<script type="text/javascript" src="src/main.js"></script>
+
+	<script type="text/javascript">
+		const windowBackground = Util.generateColorFrom(baseColor);
+
+		const r = (windowBackground & 0xFF0000) >> 16;
+		const g = (windowBackground & 0x00FF00) >> 8;
+		const b = windowBackground & 0x0000FF;
+
+		window.document.body.style.background = `rgb(${r}, ${g}, ${b})`;
+	</script>
 
 </body>
 

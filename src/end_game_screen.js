@@ -148,8 +148,6 @@ class EndGameScreen {
 		text.alpha = 0.5;
 
 		text.on('pointerdown', (_) => {
-			console.log("Click!");
-
 			const wantsToClearHighScore = confirm("Reset the highscore?");
 			if (wantsToClearHighScore) {
 				this.setHighScore(0);
