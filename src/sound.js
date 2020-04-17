@@ -1,4 +1,4 @@
-var Sound = {
+const Sound = {
 	
 	sounds: {
 		'player.hit': 'player_explode.wav',
@@ -8,6 +8,7 @@ var Sound = {
 	},
 	soundsLoaded: 0,
 	audioPool: [],
+	enabled: true,
 
 	load: function() {
 		createjs.Sound.addEventListener('fileload', this.soundLoaded);
@@ -24,11 +25,13 @@ var Sound = {
 	},
 
 	play: function(soundId) {
-		createjs.Sound.play(soundId);
+		if (this.enabled) {
+			createjs.Sound.play(soundId);
+		}
 	},
 
-	soundLoaded: function(event) {
-		var totalSounds = Object.keys(Sound.sounds).length;
+	soundLoaded: function(_) {
+		const totalSounds = Object.keys(Sound.sounds).length;
 
 		Sound.soundsLoaded++;
 		if (Sound.soundsLoaded == totalSounds) {
