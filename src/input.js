@@ -86,14 +86,17 @@ class TouchHandler {
 	}
 
 	onTouchDown(event) {
+		event.data.originalEvent.preventDefault();
 		this.updateTouches(event, true);
 	}
 
 	onTouchMove(event) {
+		event.data.originalEvent.preventDefault();
 		this.updateTouches(event, false);
 	}
 
 	onTouchUp(event) {
+		event.data.originalEvent.preventDefault();
 		const originalEvent = event.data.originalEvent;
 
 		if (event.data.pointerType == 'mouse') {
